@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Portfolio Engine</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f9; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 100px; margin-bottom: 15px; padding: 10px; box-sizing: border-box; }
+        button { background: #1a73e8; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        button:hover { background: #1557b0; }
+        #response { margin-top: 20px; padding: 15px; background: #e8f0fe; border-left: 4px solid #1a73e8; display: none; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My AI Assistant Prototype</h1>
+        <p>Submit a prompt to test the Google Gemini API integration.</p>
+        <textarea id="prompt" placeholder="Ask something..."></textarea>
+        <button onclick="askAI()">Generate Response</button>
+        <div id="response"></div>
+    </div>
+    <script>
+        async function askAI() {
+            const prompt = document.getElementById('prompt').value;
+            const respDiv = document.getElementById('response');
+            respDiv.style.display = 'block';
+            respDiv.innerText = 'Processing...';
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: prompt })
+                });
+                const data = await response.json();
+                respDiv.innerText = data.reply || data.error || 'No response returned.';
+            } catch (err) {
+                respDiv.innerText = 'Error connecting to backend: ' + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
