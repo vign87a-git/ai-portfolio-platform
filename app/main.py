@@ -28,4 +28,7 @@ async def generate_content(payload: PromptPayload):
         )
         return {"reply": response.text}
     except Exception as e:
-        return {"error": str(e)}
+        err_msg = str(e)
+        if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg or "prepayment credits" in err_msg.lower():
+            return {"error": "Gemini API quota or prepayment credits depleted. Please check billing at https://ai.studio/projects or update your GEMINI_API_KEY."}
+        return {"error": err_msg}
