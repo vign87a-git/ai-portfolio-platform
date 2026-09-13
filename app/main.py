@@ -17,11 +17,25 @@ async def read_root(request: Request):
 
 @app.post("/generate")
 async def generate_content(payload: PromptPayload):
+    use_vertex = os.environ.get("USE_VERTEX_AI", "false").lower() == "true"
+    gcp_project = os.environ.get("GCP_PROJECT_ID")
+    gcp_location = os.environ.get("GCP_LOCATION", "asia-south1")
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        return {"error": "GEMINI_API_KEY environment variable is not configured."}
+
     try:
-        client = genai.Client(api_key=api_key)
+        if use_vertex:
+            if not gcp_project:
+                return {"error": "USE_VERTEX_AI is set to true, but GCP_PROJECT_ID is not configured."}
+            client = genai.Client(
+                vertexai=True,
+                project=gcp_project,
+                location=gcp_location,
+            )
+        else:
+            if not api_key:
+                return {"error": "GEMINI_API_KEY environment variable is not configured."}
+            client = genai.Client(api_key=api_key)
+
         response = client.models.generate_content(
             model="gemini-3.6-flash",
             contents=payload.text,

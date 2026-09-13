@@ -59,4 +59,33 @@ def test_generate_content_quota_exceeded(monkeypatch):
     assert "error" in json_data
     assert "credits depleted" in json_data["error"]
 
+def test_generate_content_vertex_ai(monkeypatch):
+    monkeypatch.setenv("USE_VERTEX_AI", "true")
+    monkeypatch.setenv("GCP_PROJECT_ID", "ai-portfolio-prod")
+    monkeypatch.setenv("GCP_LOCATION", "asia-south1")
+
+    class MockResponse:
+        text = "Hello from Vertex AI Gemini!"
+
+    class MockModels:
+        def generate_content(self, model, contents):
+            assert model == "gemini-3.6-flash"
+            assert contents == "Hello Vertex"
+            return MockResponse()
+
+    class MockClient:
+        def __init__(self, vertexai, project, location):
+            assert vertexai is True
+            assert project == "ai-portfolio-prod"
+            assert location == "asia-south1"
+            self.models = MockModels()
+
+    monkeypatch.setattr("google.genai.Client", MockClient)
+
+    response = client.post("/generate", json={"text": "Hello Vertex"})
+    assert response.status_code == 200
+    json_data = response.json()
+    assert json_data == {"reply": "Hello from Vertex AI Gemini!"}
+
+
 
