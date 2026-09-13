@@ -17,32 +17,15 @@ async def read_root(request: Request):
 
 @app.post("/generate")
 async def generate_content(payload: PromptPayload):
-    use_vertex = os.environ.get("USE_VERTEX_AI", "false").lower() == "true"
-    gcp_project = os.environ.get("GCP_PROJECT_ID")
-    gcp_location = os.environ.get("GCP_LOCATION", "asia-south1")
     api_key = os.environ.get("GEMINI_API_KEY")
-
+    if not api_key:
+        return {"error": "GEMINI_API_KEY environment variable is not configured."}
     try:
-        if use_vertex:
-            if not gcp_project:
-                return {"error": "USE_VERTEX_AI is set to true, but GCP_PROJECT_ID is not configured."}
-            client = genai.Client(
-                vertexai=True,
-                project=gcp_project,
-                location=gcp_location,
-            )
-        else:
-            if not api_key:
-                return {"error": "GEMINI_API_KEY environment variable is not configured."}
-            client = genai.Client(api_key=api_key)
-
+        client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
             model="gemini-3.6-flash",
             contents=payload.text,
         )
         return {"reply": response.text}
     except Exception as e:
-        err_msg = str(e)
-        if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg or "prepayment credits" in err_msg.lower():
-            return {"error": "Gemini API quota or prepayment credits depleted. Please check billing at https://ai.studio/projects or update your GEMINI_API_KEY."}
-        return {"error": err_msg}
+        return {"error": str(e)}
