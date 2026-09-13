@@ -20,11 +20,11 @@ def test_generate_content_success(monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY", "test-key-123")
     
     class MockResponse:
-        text = "Hello from Gemini 3.6 Flash!"
+        text = "Hello from Gemini 2.5 Flash!"
 
     class MockModels:
         def generate_content(self, model, contents):
-            assert model == "gemini-3.6-flash"
+            assert model == "gemini-2.5-flash"
             assert contents == "Hello AI"
             return MockResponse()
 
@@ -38,7 +38,7 @@ def test_generate_content_success(monkeypatch):
     response = client.post("/generate", json={"text": "Hello AI"})
     assert response.status_code == 200
     json_data = response.json()
-    assert json_data == {"reply": "Hello from Gemini 3.6 Flash!"}
+    assert json_data == {"reply": "Hello from Gemini 2.5 Flash!"}
 
 
 
