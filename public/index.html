@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Portfolio Platform | Intelligent Showcase Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #131b2e;
+            --bg-card: rgba(19, 27, 46, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.4);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #38bdf8;
+            --card-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            padding: 28px;
+            backdrop-filter: blur(16px);
+            margin-bottom: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pill {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        textarea {
+            width: 100%;
+            height: 110px;
+            background: rgba(11, 15, 25, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 16px;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        #response-container {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .response-box {
+            background: rgba(11, 15, 25, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .settings-panel {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            border: 1px dashed var(--border);
+            font-size: 0.85rem;
+        }
+
+        .settings-input {
+            width: 100%;
+            background: rgba(11, 15, 25, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            outline: none;
+        }
+
+        .settings-input:focus {
+            border-color: var(--accent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                100% GitHub Native &bull; Zero Cloud Dependency
+            </div>
+            <h1>AI Portfolio Platform</h1>
+            <p class="subtitle">Interactive prototype testing Google Gemini AI models directly via GitHub Pages.</p>
+        </header>
+
+        <!-- AI Interactive Playground -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Live AI Assistant Playground
+                </div>
+                <span class="pill">Model: gemini-2.5-flash</span>
+            </div>
+
+            <div class="chip-container">
+                <button class="chip" onclick="setPrompt('Explain this project\'s GitHub-native CI/CD architecture and why it requires zero external cloud hosting.')">CI/CD Architecture</button>
+                <button class="chip" onclick="setPrompt('Summarize key skills demonstrated in this repository: multi-persona Git governance, automation, and AI integration.')">Key Skills</button>
+                <button class="chip" onclick="setPrompt('Write a concise executive summary of this AI Portfolio Platform for a senior engineering leader.')">Executive Summary</button>
+            </div>
+
+            <textarea id="promptInput" placeholder="Type your prompt here or click one of the quick suggestions above..."></textarea>
+
+            <div class="action-row">
+                <div class="status-text" id="statusMessage">Ready to generate response</div>
+                <button class="btn" id="generateBtn" onclick="generateAIResponse()">
+                    <span>Generate Response</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+
+            <div id="response-container">
+                <div class="response-box">
+                    <button class="copy-btn" onclick="copyResponse()">Copy</button>
+                    <div id="responseOutput"></div>
+                </div>
+            </div>
+
+            <div class="settings-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 500; color: var(--text-secondary);">⚙️ API Configuration</span>
+                    <span style="color: var(--text-muted); font-size: 0.75rem;">Stored locally in your browser</span>
+                </div>
+                <input type="password" id="apiKeyInput" class="settings-input" placeholder="Custom Google AI Studio GEMINI_API_KEY (optional)" onchange="saveApiKey()">
+                <div style="margin-top: 6px; color: var(--text-muted); font-size: 0.75rem;">
+                    If not specified, uses repository injected key. You can generate a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>.
+                </div>
+            </div>
+        </div>
+
+        <!-- Architectural Highlights -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    Platform Architecture Highlights
+                </div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-title">1. Multi-Persona Governance</div>
+                    <div class="feature-desc">Branch protection enforced with isolated Developer (`vign87a-dev`) and Lead Reviewer (`vign87a-lead`) personas.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">2. Automated CI Pipeline</div>
+                    <div class="feature-desc">Every PR and merge undergoes automated Pytest test verification on GitHub Actions runners.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-title">3. 100% Free & Zero-Infra</div>
+                    <div class="feature-desc">No external cloud subscriptions, no GCP billing risk, zero sign-in required, hosted seamlessly on GitHub Pages.</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Crafted by <a href="https://github.com/vign87a-git" target="_blank">vign87a-git</a> &bull; Deployed via GitHub Actions</p>
+        </footer>
+    </div>
+
+    <script>
+        const INJECTED_API_KEY = "__GEMINI_API_KEY__";
+
+        function getActiveApiKey() {
+            const savedKey = localStorage.getItem('gemini_user_api_key');
+            if (savedKey && savedKey.trim().length > 0) {
+                return savedKey.trim();
+            }
+            if (INJECTED_API_KEY && !INJECTED_API_KEY.startsWith('__')) {
+                return INJECTED_API_KEY;
+            }
+            return '';
+        }
+
+        function saveApiKey() {
+            const val = document.getElementById('apiKeyInput').value.trim();
+            if (val) {
+                localStorage.setItem('gemini_user_api_key', val);
+                document.getElementById('statusMessage').innerText = 'API key saved in browser localStorage.';
+            } else {
+                localStorage.removeItem('gemini_user_api_key');
+                document.getElementById('statusMessage').innerText = 'Using default injected key.';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('gemini_user_api_key');
+            if (saved) {
+                document.getElementById('apiKeyInput').value = saved;
+            }
+        });
+
+        function setPrompt(text) {
+            document.getElementById('promptInput').value = text;
+        }
+
+        async function generateAIResponse() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            const statusMsg = document.getElementById('statusMessage');
+            const respContainer = document.getElementById('response-container');
+            const respOutput = document.getElementById('responseOutput');
+            const btn = document.getElementById('generateBtn');
+
+            if (!prompt) {
+                statusMsg.innerText = 'Please enter a prompt first.';
+                return;
+            }
+
+            const apiKey = getActiveApiKey();
+            if (!apiKey) {
+                statusMsg.innerText = 'API key required. Please enter your Gemini API key in the settings panel below.';
+                return;
+            }
+
+            btn.disabled = true;
+            statusMsg.innerText = 'Connecting to Google Gemini API...';
+            respContainer.style.display = 'block';
+            respOutput.innerText = 'Generating response, please wait...';
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error?.message || `HTTP Error ${response.status}`);
+                }
+
+                const data = await response.json();
+                const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response text received.';
+
+                respOutput.innerText = replyText;
+                statusMsg.innerText = 'Response generated successfully.';
+            } catch (err) {
+                respOutput.innerText = `Error: ${err.message}\n\nTip: You can get a free API key with 1,500 daily requests at https://aistudio.google.com/app/apikey and paste it into the configuration panel below.`;
+                statusMsg.innerText = 'Error occurred during generation.';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function copyResponse() {
+            const text = document.getElementById('responseOutput').innerText;
+            if (text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.querySelector('.copy-btn');
+                    btn.innerText = 'Copied!';
+                    setTimeout(() => btn.innerText = 'Copy', 2000);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
