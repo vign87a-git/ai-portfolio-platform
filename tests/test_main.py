@@ -40,3 +40,5 @@ def test_generate_content_success(monkeypatch):
     json_data = response.json()
     assert json_data == {"reply": "Hello from Gemini 3.6 Flash!"}
 
+
+
