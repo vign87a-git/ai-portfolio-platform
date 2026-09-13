@@ -6,16 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
-# Permissions to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+env:
+  PROJECT_ID: gen-lang-client-0710537618
+  REGION: asia-south1
+  REPO_NAME: ai-web-repo
+  IMAGE_NAME: ai-portfolio-app
+  SERVICE_NAME: ai-portfolio-service
 
 jobs:
   build-and-test:
@@ -40,32 +36,41 @@ jobs:
           PYTHONPATH=. pytest tests/
           echo "Unit tests passed successfully"
 
-  deploy-pages:
-    name: Continuous Deployment (GitHub Pages)
+  deploy:
+    name: Continuous Deployment (Cloud Run)
     needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Inject Gemini API Key Secret
-        run: |
-          if [ -n "${{ secrets.GEMINI_API_KEY }}" ]; then
-            sed -i "s|__GEMINI_API_KEY__|${{ secrets.GEMINI_API_KEY }}|g" public/index.html
-          fi
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          path: 'public'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker Auth for Artifact Registry
+        run: |-
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and Tag Docker Image
+        run: |-
+          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+
+      - name: Push Docker Image
+        run: |-
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          env_vars: |-
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          flags: '--allow-unauthenticated'
