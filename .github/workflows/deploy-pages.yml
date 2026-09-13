@@ -1,4 +1,4 @@
-﻿name: 100% GitHub-Native Deployment (GitHub Pages)
+name: 100% GitHub-Native Deployment (GitHub Pages)
 
 on:
   push:
@@ -52,10 +52,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Inject Gemini API Key Secret
+        env:
+          GEMINI_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -n "${{ secrets.GEMINI_API_KEY }}" ]; then
-            sed -i "s|__GEMINI_API_KEY__|${{ secrets.GEMINI_API_KEY }}|g" public/index.html
-          fi
+          python3 -c "
+          import os
+          k = os.environ.get('GEMINI_KEY', '')
+          if k:
+              with open('public/index.html', 'r', encoding='utf-8') as f:
+                  c = f.read()
+              c = c.replace('__GEMINI_API_KEY__', k)
+              with open('public/index.html', 'w', encoding='utf-8') as f:
+                  f.write(c)
+              print('Successfully injected GEMINI_API_KEY into public/index.html')
+          else:
+              print('Warning: GEMINI_API_KEY secret is not set')
+          "
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

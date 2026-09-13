@@ -352,14 +352,21 @@
                 </div>
             </div>
 
-            <div class="settings-panel">
+            <div style="margin-top: 20px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="customKeyToggle" onchange="toggleCustomKey()" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary);">
+                <label for="customKeyToggle" style="color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; user-select: none;">
+                    Use my own Gemini API Key (optional)
+                </label>
+            </div>
+
+            <div id="customKeyPanel" class="settings-panel" style="display: none; margin-top: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 500; color: var(--text-secondary);">⚙️ API Configuration</span>
+                    <span style="font-weight: 500; color: var(--text-secondary);">⚙️ Custom API Key</span>
                     <span style="color: var(--text-muted); font-size: 0.75rem;">Stored locally in your browser</span>
                 </div>
-                <input type="password" id="apiKeyInput" class="settings-input" placeholder="Custom Google AI Studio GEMINI_API_KEY (optional)" onchange="saveApiKey()">
+                <input type="password" id="apiKeyInput" class="settings-input" placeholder="Paste your personal Google AI Studio GEMINI_API_KEY" oninput="saveApiKey()">
                 <div style="margin-top: 6px; color: var(--text-muted); font-size: 0.75rem;">
-                    If not specified, uses repository injected key. You can generate a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>.
+                    Default works automatically with the platform's free tier key. Check the box only if you want to use your personal key from <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>.
                 </div>
             </div>
         </div>
@@ -396,13 +403,32 @@
     <script>
         const INJECTED_API_KEY = "__GEMINI_API_KEY__";
 
+        function toggleCustomKey() {
+            const isChecked = document.getElementById('customKeyToggle').checked;
+            const panel = document.getElementById('customKeyPanel');
+            panel.style.display = isChecked ? 'block' : 'none';
+            const statusMsg = document.getElementById('statusMessage');
+            if (isChecked) {
+                statusMsg.innerText = 'Custom key mode active. Paste your key below.';
+            } else {
+                statusMsg.innerText = 'Using default platform free tier key.';
+            }
+        }
+
         function getActiveApiKey() {
+            const isChecked = document.getElementById('customKeyToggle')?.checked;
+            if (isChecked) {
+                const customKey = document.getElementById('apiKeyInput')?.value.trim() || localStorage.getItem('gemini_user_api_key');
+                return customKey || '';
+            }
+            // By default: Always use the repository injected key!
+            if (INJECTED_API_KEY && !INJECTED_API_KEY.startsWith('__')) {
+                return INJECTED_API_KEY;
+            }
+            // Fallback to localStorage if any
             const savedKey = localStorage.getItem('gemini_user_api_key');
             if (savedKey && savedKey.trim().length > 0) {
                 return savedKey.trim();
-            }
-            if (INJECTED_API_KEY && !INJECTED_API_KEY.startsWith('__')) {
-                return INJECTED_API_KEY;
             }
             return '';
         }
@@ -411,14 +437,15 @@
             const val = document.getElementById('apiKeyInput').value.trim();
             if (val) {
                 localStorage.setItem('gemini_user_api_key', val);
-                document.getElementById('statusMessage').innerText = 'API key saved in browser localStorage.';
             } else {
                 localStorage.removeItem('gemini_user_api_key');
-                document.getElementById('statusMessage').innerText = 'Using default injected key.';
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Ensure checkbox is unchecked by default so default free tier key is used
+            const toggle = document.getElementById('customKeyToggle');
+            if (toggle) toggle.checked = false;
             const saved = localStorage.getItem('gemini_user_api_key');
             if (saved) {
                 document.getElementById('apiKeyInput').value = saved;
@@ -442,13 +469,18 @@
             }
 
             const apiKey = getActiveApiKey();
+            const isCustomChecked = document.getElementById('customKeyToggle')?.checked;
             if (!apiKey) {
-                statusMsg.innerText = 'API key required. Please enter your Gemini API key in the settings panel below.';
+                if (isCustomChecked) {
+                    statusMsg.innerText = 'Please paste your custom Gemini API key or uncheck the box to use the default key.';
+                } else {
+                    statusMsg.innerText = 'Default API key is being initialized. Please wait a moment.';
+                }
                 return;
             }
 
             btn.disabled = true;
-            statusMsg.innerText = 'Connecting to Google Gemini API...';
+            statusMsg.innerText = 'Connecting to Google Gemini API (gemini-3.6-flash)...';
             respContainer.style.display = 'block';
             respOutput.innerText = 'Generating response, please wait...';
 
@@ -474,7 +506,7 @@
                 respOutput.innerText = replyText;
                 statusMsg.innerText = 'Response generated successfully.';
             } catch (err) {
-                respOutput.innerText = `Error: ${err.message}\n\nTip: You can get a free API key with 1,500 daily requests at https://aistudio.google.com/app/apikey and paste it into the configuration panel below.`;
+                respOutput.innerText = `Error: ${err.message}\n\nTip: If quota is exceeded, you can supply your own free key by checking "Use my own Gemini API Key" below.`;
                 statusMsg.innerText = 'Error occurred during generation.';
             } finally {
                 btn.disabled = false;
