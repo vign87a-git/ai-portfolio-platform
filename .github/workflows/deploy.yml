@@ -72,5 +72,7 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           env_vars: |-
-            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            USE_VERTEX_AI=true
+            GCP_PROJECT_ID=ai-portfolio-platform-prod
+            GCP_LOCATION=asia-south1
           flags: '--allow-unauthenticated'
