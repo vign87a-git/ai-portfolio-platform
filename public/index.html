@@ -326,7 +326,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     Live AI Assistant Playground
                 </div>
-                <span class="pill">Model: gemini-2.5-flash</span>
+                <span class="pill">Model: gemini-3.6-flash</span>
             </div>
 
             <div class="chip-container">
@@ -452,7 +452,7 @@
             respContainer.style.display = 'block';
             respOutput.innerText = 'Generating response, please wait...';
 
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(endpoint, {
