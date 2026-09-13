@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 env:
   PROJECT_ID: gen-lang-client-0710537618
   REGION: asia-south1
@@ -36,7 +45,37 @@ jobs:
           PYTHONPATH=. pytest tests/
           echo "Unit tests passed successfully"
 
-  deploy:
+  deploy-pages:
+    name: Continuous Deployment (GitHub Pages)
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Inject Gemini API Key Secret
+        run: |
+          if [ -n "${{ secrets.GEMINI_API_KEY }}" ]; then
+            sed -i "s|__GEMINI_API_KEY__|${{ secrets.GEMINI_API_KEY }}|g" public/index.html
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  deploy-cloud-run:
     name: Continuous Deployment (Cloud Run)
     needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
