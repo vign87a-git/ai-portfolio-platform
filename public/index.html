@@ -726,6 +726,47 @@ You have complete knowledge of this repository's engineering journey, architectu
 Always respond professionally, authoritatively, and technically, defending these design decisions with concrete engineering rationale.
 `;
 
+        async function fetchWithRetry(endpoint, requestBody, maxRetries = 2) {
+            const statusMsg = document.getElementById('statusMessage');
+            const respOutput = document.getElementById('responseOutput');
+
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (response.ok) {
+                    return await response.json();
+                }
+
+                const errData = await response.json().catch(() => ({}));
+                const errMsg = errData.error?.message || `HTTP Error ${response.status}`;
+                const isRateLimit = response.status === 429 || errMsg.includes('Quota exceeded') || errMsg.includes('retry in');
+
+                if (isRateLimit && attempt < maxRetries) {
+                    const match = errMsg.match(/retry in ([0-9.]+)s/i);
+                    let waitSeconds = match ? Math.ceil(parseFloat(match[1])) : 8;
+                    if (waitSeconds < 2) waitSeconds = 3;
+                    if (waitSeconds > 15) waitSeconds = 10;
+
+                    for (let s = waitSeconds; s > 0; s--) {
+                        const countdownMsg = `⏳ Google AI Studio free tier rate limit reached (20 requests/min). Auto-retrying in ${s}s (Attempt ${attempt + 1}/${maxRetries})...`;
+                        statusMsg.innerText = countdownMsg;
+                        respOutput.innerText = countdownMsg;
+                        await new Promise(r => setTimeout(r, 1000));
+                    }
+
+                    statusMsg.innerText = 'Retrying request with Gemini 3.6 Flash...';
+                    respOutput.innerText = 'Retrying request with Gemini 3.6 Flash, please wait...';
+                    continue;
+                }
+
+                throw new Error(errMsg);
+            }
+        }
+
         async function generateAIResponse() {
             const prompt = document.getElementById('promptInput').value.trim();
             const statusMsg = document.getElementById('statusMessage');
@@ -767,25 +808,14 @@ Always respond professionally, authoritatively, and technically, defending these
             };
 
             try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error?.message || `HTTP Error ${response.status}`);
-                }
-
-                const data = await response.json();
+                const data = await fetchWithRetry(endpoint, requestBody, 2);
                 const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response text received.';
 
                 respOutput.innerText = replyText;
                 statusMsg.innerText = 'Response generated successfully with repository self-awareness.';
             } catch (err) {
-                respOutput.innerText = `Error: ${err.message}\n\nTip: You can supply your personal free key by checking "Use my own Gemini API Key" below.`;
-                statusMsg.innerText = 'Error occurred during generation.';
+                respOutput.innerText = `Notice: ${err.message}\n\n💡 Tip: You can supply your personal free key by checking "Use my own Gemini API Key" below.`;
+                statusMsg.innerText = 'Rate limit or service notice.';
             } finally {
                 btn.disabled = false;
             }
