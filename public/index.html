@@ -453,10 +453,10 @@
                     <span>Dynamic Recruiter Lens: Evaluate Candidate By Role</span>
                 </div>
                 <div class="lens-tabs">
-                    <button class="lens-tab active" onclick="setLens('all')">🌐 All-Rounder</button>
-                    <button class="lens-tab" onclick="setLens('devops')">☁️ Cloud & DevOps Architect</button>
-                    <button class="lens-tab" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
-                    <button class="lens-tab" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
+                    <button class="lens-tab active" data-lens="all" onclick="setLens('all')">🌐 All-Rounder</button>
+                    <button class="lens-tab" data-lens="devops" onclick="setLens('devops')">☁️ Cloud & DevOps Architect</button>
+                    <button class="lens-tab" data-lens="agentic" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
+                    <button class="lens-tab" data-lens="fullstack" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
                 </div>
             </div>
             <div class="lens-summary-box">
@@ -608,9 +608,14 @@
         function setLens(lensKey) {
             currentLens = lensKey;
             
-            // Update active tab class
-            document.querySelectorAll('.lens-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            // Update active tab class deterministically
+            document.querySelectorAll('.lens-tab').forEach(tab => {
+                if (tab.getAttribute('data-lens') === lensKey) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
 
             // Update description
             document.getElementById('lensDescription').innerHTML = LENS_DATA[lensKey].desc;
