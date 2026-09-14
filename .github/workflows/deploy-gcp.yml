@@ -1,10 +1,10 @@
-﻿name: Enterprise GCP Cloud Run Pipeline
+name: Enterprise GCP Cloud Run Pipeline
 
 on:
   push:
-    branches: [ "main", "gcp-production" ]
+    branches: [ "gcp-production" ]
   pull_request:
-    branches: [ "main", "gcp-production" ]
+    branches: [ "gcp-production" ]
   workflow_dispatch:
 
 env:
@@ -40,7 +40,7 @@ jobs:
   deploy-gcp:
     name: Continuous Deployment (Cloud Run)
     needs: build-and-test
-    if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/gcp-production')) || github.event_name == 'workflow_dispatch'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/gcp-production') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
