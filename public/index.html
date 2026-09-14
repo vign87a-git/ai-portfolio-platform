@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Portfolio Platform | Intelligent Showcase Hub</title>
+    <title>AI Portfolio Platform | Self-Aware Architecture & Recruiter Lens</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0b0f19;
             --bg-secondary: #131b2e;
-            --bg-card: rgba(19, 27, 46, 0.7);
+            --bg-card: rgba(19, 27, 46, 0.75);
             --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(99, 102, 241, 0.4);
+            --border-hover: rgba(99, 102, 241, 0.45);
             --primary: #6366f1;
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
             --accent: #38bdf8;
+            --accent-green: #34d399;
             --card-radius: 16px;
         }
 
@@ -43,20 +45,20 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
         }
 
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
+            gap: 8px;
+            padding: 6px 16px;
             background: rgba(99, 102, 241, 0.12);
             border: 1px solid rgba(99, 102, 241, 0.3);
             border-radius: 9999px;
@@ -66,21 +68,123 @@
             font-weight: 500;
         }
 
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
         h1 {
-            font-size: 2.75rem;
-            font-weight: 700;
+            font-size: 2.85rem;
+            font-weight: 800;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
 
         .subtitle {
             color: var(--text-secondary);
             font-size: 1.1rem;
-            max-width: 600px;
+            max-width: 680px;
             margin: 0 auto;
+        }
+
+        /* Recruiter Lens Selector */
+        .lens-container {
+            background: rgba(19, 27, 46, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        .lens-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .lens-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lens-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .lens-tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lens-tab:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .lens-tab.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+        }
+
+        .lens-summary-box {
+            background: rgba(11, 15, 25, 0.6);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--accent);
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .lens-pitch-btn {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lens-pitch-btn:hover {
+            background: rgba(56, 189, 248, 0.25);
+            color: white;
         }
 
         .card {
@@ -103,6 +207,8 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .card-title {
@@ -149,7 +255,7 @@
         textarea {
             width: 100%;
             height: 110px;
-            background: rgba(11, 15, 25, 0.8);
+            background: rgba(11, 15, 25, 0.85);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 14px;
@@ -171,6 +277,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -210,10 +317,10 @@
         }
 
         .response-box {
-            background: rgba(11, 15, 25, 0.9);
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(11, 15, 25, 0.92);
+            border: 1px solid rgba(99, 102, 241, 0.35);
             border-radius: 10px;
-            padding: 20px;
+            padding: 22px;
             font-size: 0.95rem;
             line-height: 1.7;
             white-space: pre-wrap;
@@ -239,7 +346,7 @@
         }
 
         .settings-panel {
-            margin-top: 16px;
+            margin-top: 14px;
             padding: 16px;
             background: rgba(0, 0, 0, 0.25);
             border-radius: 10px;
@@ -249,7 +356,7 @@
 
         .settings-input {
             width: 100%;
-            background: rgba(11, 15, 25, 0.8);
+            background: rgba(11, 15, 25, 0.85);
             border: 1px solid var(--border);
             border-radius: 6px;
             padding: 8px 12px;
@@ -266,7 +373,7 @@
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 16px;
             margin-top: 20px;
         }
@@ -276,13 +383,32 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-hover);
+        }
+
+        .feature-badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--accent);
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .feature-title {
             font-weight: 600;
-            color: var(--accent);
+            color: var(--text-primary);
             margin-bottom: 6px;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .feature-desc {
@@ -312,35 +438,56 @@
     <div class="container">
         <header>
             <div class="badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                100% GitHub Native &bull; Zero Cloud Dependency
+                <span class="badge-dot"></span>
+                <span>100% Free &bull; Autonomous DevSecOps &bull; Self-Aware Architecture</span>
             </div>
             <h1>AI Portfolio Platform</h1>
-            <p class="subtitle">Interactive prototype testing Google Gemini AI models directly via GitHub Pages.</p>
+            <p class="subtitle">An enterprise-grade platform demonstrating multi-persona governance, autonomous AI code review, and self-defending architecture.</p>
         </header>
 
-        <!-- AI Interactive Playground -->
+        <!-- Dynamic Recruiter Lens -->
+        <div class="lens-container">
+            <div class="lens-header">
+                <div class="lens-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                    <span>Dynamic Recruiter Lens: Evaluate Candidate By Role</span>
+                </div>
+                <div class="lens-tabs">
+                    <button class="lens-tab active" onclick="setLens('all')">🌐 All-Rounder</button>
+                    <button class="lens-tab" onclick="setLens('devops')">☁️ Cloud & DevOps Architect</button>
+                    <button class="lens-tab" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
+                    <button class="lens-tab" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
+                </div>
+            </div>
+            <div class="lens-summary-box">
+                <div id="lensDescription">
+                    <strong>Comprehensive Overview:</strong> Highlights multi-persona Git governance, automated CI/CD, and real-time Gemini AI integration.
+                </div>
+                <button class="lens-pitch-btn" onclick="generateRolePitch()">✨ Generate Role Pitch</button>
+            </div>
+        </div>
+
+        <!-- AI Interactive Playground & Self-Aware Meta Defense -->
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    Live AI Assistant Playground
+                    <span>Interactive AI & Architecture Defense Playground</span>
                 </div>
-                <span class="pill">Model: gemini-3.6-flash</span>
+                <span class="pill">Active Model: gemini-3.6-flash</span>
             </div>
 
-            <div class="chip-container">
-                <button class="chip" onclick="setPrompt('Explain this project\'s GitHub-native CI/CD architecture and why it requires zero external cloud hosting.')">CI/CD Architecture</button>
-                <button class="chip" onclick="setPrompt('Summarize key skills demonstrated in this repository: multi-persona Git governance, automation, and AI integration.')">Key Skills</button>
-                <button class="chip" onclick="setPrompt('Write a concise executive summary of this AI Portfolio Platform for a senior engineering leader.')">Executive Summary</button>
+            <!-- Dynamic Role-Specific Prompts -->
+            <div class="chip-container" id="chipContainer">
+                <!-- Injected dynamically by JavaScript -->
             </div>
 
-            <textarea id="promptInput" placeholder="Type your prompt here or click one of the quick suggestions above..."></textarea>
+            <textarea id="promptInput" placeholder="Challenge the AI on architecture decisions, trade-offs, or choose a prompt suggestion above..."></textarea>
 
             <div class="action-row">
-                <div class="status-text" id="statusMessage">Ready to generate response</div>
+                <div class="status-text" id="statusMessage">Ready to generate response (Using default platform AI engine)</div>
                 <button class="btn" id="generateBtn" onclick="generateAIResponse()">
-                    <span>Generate Response</span>
+                    <span>Ask Gemini 3.6 Flash</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </div>
@@ -352,17 +499,18 @@
                 </div>
             </div>
 
+            <!-- Optional Custom Key Checkbox -->
             <div style="margin-top: 20px; display: flex; align-items: center; gap: 8px;">
                 <input type="checkbox" id="customKeyToggle" onchange="toggleCustomKey()" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary);">
                 <label for="customKeyToggle" style="color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; user-select: none;">
-                    Use my own Gemini API Key (optional)
+                    Use personal Gemini API Key (optional)
                 </label>
             </div>
 
             <div id="customKeyPanel" class="settings-panel" style="display: none; margin-top: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-weight: 500; color: var(--text-secondary);">⚙️ Custom API Key</span>
-                    <span style="color: var(--text-muted); font-size: 0.75rem;">Stored locally in your browser</span>
+                    <span style="color: var(--text-muted); font-size: 0.75rem;">Stored locally in browser</span>
                 </div>
                 <input type="password" id="apiKeyInput" class="settings-input" placeholder="Paste your personal Google AI Studio GEMINI_API_KEY" oninput="saveApiKey()">
                 <div style="margin-top: 6px; color: var(--text-muted); font-size: 0.75rem;">
@@ -376,33 +524,123 @@
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                    Platform Architecture Highlights
+                    <span>Engineered Production Architecture</span>
                 </div>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-title">1. Multi-Persona Governance</div>
-                    <div class="feature-desc">Branch protection enforced with isolated Developer (`vign87a-dev`) and Lead Reviewer (`vign87a-lead`) personas.</div>
+                    <span class="feature-badge">Pillar 1: Agentic DevOps</span>
+                    <div class="feature-title">Autonomous PR Code Reviewer</div>
+                    <div class="feature-desc">GitHub Actions workflow triggers Gemini 3.6 Flash to audit every PR diff for security leaks, complexity, and performance before human review.</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-title">2. Automated CI Pipeline</div>
-                    <div class="feature-desc">Every PR and merge undergoes automated Pytest test verification on GitHub Actions runners.</div>
+                    <span class="feature-badge">Pillar 2: Meta-Architecture</span>
+                    <div class="feature-title">Self-Defending System Design</div>
+                    <div class="feature-desc">The AI is primed with this repo's real git history, trade-offs, and migration decisions (Cloud Run vs. GitHub Pages), defending design choices in real time.</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-title">3. 100% Free & Zero-Infra</div>
-                    <div class="feature-desc">No external cloud subscriptions, no GCP billing risk, zero sign-in required, hosted seamlessly on GitHub Pages.</div>
+                    <span class="feature-badge">Pillar 3: Adaptive UX</span>
+                    <div class="feature-title">Dynamic Role-Adaptive Lens</div>
+                    <div class="feature-desc">Recruiters can evaluate candidate depth by toggling roles (DevOps, Agentic AI, Full-Stack) to generate targeted technical pitches.</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-badge">Governance</span>
+                    <div class="feature-title">Multi-Persona Git Isolation</div>
+                    <div class="feature-desc">Developer (<code>vign87a-dev</code>) and Lead Reviewer (<code>vign87a-lead</code>) personas enforce branch protection and clean SSH identity separation.</div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>Crafted by <a href="https://github.com/vign87a-git" target="_blank">vign87a-git</a> &bull; Deployed via GitHub Actions</p>
+            <p>Architected by <a href="https://github.com/vign87a-git" target="_blank">vign87a-git</a> &bull; Powered by GitHub Actions &amp; Gemini 3.6 Flash</p>
         </footer>
     </div>
 
     <script>
         const INJECTED_API_KEY = "__GEMINI_API_KEY__";
 
+        // Current active recruiter lens
+        let currentLens = 'all';
+
+        const LENS_DATA = {
+            all: {
+                desc: "<strong>Comprehensive Overview:</strong> Highlights multi-persona Git governance, automated CI/CD, and real-time Gemini AI integration.",
+                prompts: [
+                    "Explain this project's GitHub-native CI/CD architecture and why it requires zero external cloud hosting.",
+                    "Why did this project migrate from Google Cloud Run to GitHub Pages?",
+                    "How does your multi-persona Git setup enforce enterprise zero-trust governance?",
+                    "How does the autonomous AI PR reviewer bot evaluate pull requests?"
+                ],
+                pitch: "Provide a comprehensive 3-paragraph executive summary of this AI Portfolio Platform, highlighting how it balances enterprise DevOps governance, Agentic AI automation, and zero-cost serverless hosting."
+            },
+            devops: {
+                desc: "<strong>Cloud & DevOps Architect Focus:</strong> Evaluates automated CI/CD, zero-trust secrets management, multi-persona SSH configuration, and cost-optimized infrastructure.",
+                prompts: [
+                    "Critique the architecture trade-off between containerized Cloud Run and static GitHub Pages hosting.",
+                    "How does your multi-persona SSH configuration prevent accidental credential cross-contamination in Git?",
+                    "Walk me through the automated GitHub Actions CI pipeline and test coverage enforcement.",
+                    "What DevSecOps security checks does the autonomous PR code reviewer bot perform on diffs?"
+                ],
+                pitch: "Synthesize an executive pitch specifically tailored for a Senior Cloud & DevOps Architect role, highlighting infrastructure as code, automated pipelines, branch protection governance, and zero-cost high-availability hosting."
+            },
+            agentic: {
+                desc: "<strong>Agentic AI & LLM Focus:</strong> Evaluates autonomous PR code reviewing, prompt orchestration, Gemini 3.6 Flash capabilities, and human-in-the-loop governance.",
+                prompts: [
+                    "How is Gemini 3.6 Flash integrated into GitHub Actions as an autonomous code reviewer?",
+                    "Explain the prompt engineering and structured verdict strategy used for the PR review bot.",
+                    "How does this application handle Google Gemini API rate limits and free tier quotas gracefully?",
+                    "What makes this platform an example of human-in-the-loop Agentic AI?"
+                ],
+                pitch: "Synthesize an executive pitch tailored for an Agentic AI & LLM Systems Engineer role, highlighting autonomous workflows, prompt engineering, multi-model adaptability, and production GenAI integration."
+            },
+            fullstack: {
+                desc: "<strong>Full-Stack Python Focus:</strong> Evaluates FastAPI backend design, Jinja2 templating, asynchronous JavaScript UX, and Pytest coverage.",
+                prompts: [
+                    "How does the FastAPI backend structure endpoints, and how does the frontend communicate with it asynchronously?",
+                    "Explain the Pytest test suite and how mock fixtures protect against runtime API failures.",
+                    "How is the frontend styled and structured without bulky third-party JavaScript frameworks?",
+                    "How does the application support both injected repository secrets and user-supplied API keys?"
+                ],
+                pitch: "Synthesize an executive pitch tailored for a Senior Full-Stack Python Engineer role, highlighting clean FastAPI architecture, test-driven development, responsive CSS/JS, and seamless API design."
+            }
+        };
+
+        function setLens(lensKey) {
+            currentLens = lensKey;
+            
+            // Update active tab class
+            document.querySelectorAll('.lens-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update description
+            document.getElementById('lensDescription').innerHTML = LENS_DATA[lensKey].desc;
+
+            // Update chips
+            renderChips(LENS_DATA[lensKey].prompts);
+        }
+
+        function renderChips(prompts) {
+            const container = document.getElementById('chipContainer');
+            container.innerHTML = '';
+            prompts.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'chip';
+                btn.innerText = p;
+                btn.onclick = () => setPrompt(p);
+                container.appendChild(btn);
+            });
+        }
+
+        function generateRolePitch() {
+            setPrompt(LENS_DATA[currentLens].pitch);
+            generateAIResponse();
+        }
+
+        function setPrompt(text) {
+            document.getElementById('promptInput').value = text;
+        }
+
+        // Custom API Key Toggle
         function toggleCustomKey() {
             const isChecked = document.getElementById('customKeyToggle').checked;
             const panel = document.getElementById('customKeyPanel');
@@ -442,19 +680,46 @@
             }
         }
 
+        // Initialize UI
         window.addEventListener('DOMContentLoaded', () => {
-            // Ensure checkbox is unchecked by default so default free tier key is used
+            renderChips(LENS_DATA['all'].prompts);
+
             const toggle = document.getElementById('customKeyToggle');
             if (toggle) toggle.checked = false;
+
             const saved = localStorage.getItem('gemini_user_api_key');
             if (saved) {
                 document.getElementById('apiKeyInput').value = saved;
             }
         });
 
-        function setPrompt(text) {
-            document.getElementById('promptInput').value = text;
-        }
+        // System prompt that gives Gemini complete self-awareness of this repository
+        const REPO_SELF_AWARE_SYSTEM_PROMPT = `
+You are the Self-Aware AI Voice and Architectural Defender of this AI Portfolio Platform, created by Vigneshwaran (GitHub: vign87a-git).
+You have complete knowledge of this repository's engineering journey, architecture, and design decisions:
+
+1. ARCHITECTURE:
+   - Backend: FastAPI with Jinja2 templates, Uvicorn, and Python 3.11/3.14. Tested with Pytest.
+   - Hosting & CI/CD: 100% GitHub-Native. GitHub Actions runs CI (unit tests) and CD (GitHub Pages deployment).
+   - Cost & Infra: $0.00 zero-cost architecture. No paid GCP servers, no billing risk, 100% uptime on GitHub Pages.
+   - AI Engine: Google Gemini 3.6 Flash via official Google GenAI integration.
+
+2. MULTI-PERSONA GIT GOVERNANCE:
+   - Developer Persona (vign87a-dev, vign87a+gitdev@gmail.com, SSH host github-dev): Authors feature branches, commits code, opens PRs.
+   - Lead Reviewer Persona (vign87a-lead, vign87a+gitlead@gmail.com, SSH host github-lead): Code reviewer, approves PRs, merges to main.
+   - Repository Owner (vign87a-git): Oversees settings and secrets.
+   - Benefit: Strict separation of privileges prevents credential pollution and simulates enterprise compliance.
+
+3. AUTONOMOUS AI PR REVIEWER BOT:
+   - Implemented via GitHub Actions (.github/workflows/ai-code-review.yml).
+   - Automatically triggers on pull requests, analyzes the git diff using Gemini 3.6 Flash for security leaks and code quality, and posts structured markdown reviews on the PR before human lead review.
+
+4. DESIGN TRADE-OFFS:
+   - Migrated from GCP Cloud Run container hosting to GitHub Pages to eliminate billing quota failures and credit depletion while delivering 100% free, permanent public access.
+   - Upgraded active model from gemini-2.5-flash to gemini-3.6-flash.
+
+Always respond professionally, authoritatively, and technically, defending these design decisions with concrete engineering rationale.
+`;
 
         async function generateAIResponse() {
             const prompt = document.getElementById('promptInput').value.trim();
@@ -464,7 +729,7 @@
             const btn = document.getElementById('generateBtn');
 
             if (!prompt) {
-                statusMsg.innerText = 'Please enter a prompt first.';
+                statusMsg.innerText = 'Please enter a prompt or select a suggestion above.';
                 return;
             }
 
@@ -480,19 +745,27 @@
             }
 
             btn.disabled = true;
-            statusMsg.innerText = 'Connecting to Google Gemini API (gemini-3.6-flash)...';
+            statusMsg.innerText = 'Consulting Gemini 3.6 Flash with full repository context...';
             respContainer.style.display = 'block';
-            respOutput.innerText = 'Generating response, please wait...';
+            respOutput.innerText = 'Analyzing architecture and synthesizing response, please wait...';
 
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+
+            const requestBody = {
+                contents: [
+                    {
+                        parts: [
+                            { text: `${REPO_SELF_AWARE_SYSTEM_PROMPT}\n\nVisitor Question / Evaluation Prompt:\n${prompt}` }
+                        ]
+                    }
+                ]
+            };
 
             try {
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
                 if (!response.ok) {
@@ -504,9 +777,9 @@
                 const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response text received.';
 
                 respOutput.innerText = replyText;
-                statusMsg.innerText = 'Response generated successfully.';
+                statusMsg.innerText = 'Response generated successfully with repository self-awareness.';
             } catch (err) {
-                respOutput.innerText = `Error: ${err.message}\n\nTip: If quota is exceeded, you can supply your own free key by checking "Use my own Gemini API Key" below.`;
+                respOutput.innerText = `Error: ${err.message}\n\nTip: You can supply your personal free key by checking "Use my own Gemini API Key" below.`;
                 statusMsg.innerText = 'Error occurred during generation.';
             } finally {
                 btn.disabled = false;

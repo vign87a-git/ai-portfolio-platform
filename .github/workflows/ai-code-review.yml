@@ -1,0 +1,131 @@
+name: Autonomous AI Code Reviewer
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  ai-code-review:
+    name: AI Architectural & Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Perform AI Review with Gemini 3.6 Flash
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          python - << 'EOF'
+          import os
+          import subprocess
+          import json
+          import urllib.request
+          import urllib.error
+
+          api_key = os.environ.get("GEMINI_API_KEY")
+          github_token = os.environ.get("GITHUB_TOKEN")
+          pr_number = os.environ.get("PR_NUMBER")
+          repo = os.environ.get("REPO")
+          base_ref = os.environ.get("BASE_REF")
+
+          if not api_key:
+              print("GEMINI_API_KEY is not configured in repository secrets. Skipping AI review.")
+              exit(0)
+
+          # Fetch base branch to ensure diff is accurate
+          subprocess.run(["git", "fetch", "origin", base_ref], check=False)
+
+          # Get git diff against base branch
+          diff_proc = subprocess.run(
+              ["git", "diff", f"origin/{base_ref}...HEAD"],
+              capture_output=True,
+              text=True,
+              errors="replace"
+          )
+          diff_text = diff_proc.stdout.strip()
+
+          if not diff_text:
+              print("No git diff detected. Skipping AI review.")
+              exit(0)
+
+          # Limit diff to ~25,000 characters to ensure fast turnaround and avoid token saturation
+          if len(diff_text) > 25000:
+              diff_text = diff_text[:25000] + "\n\n... [Diff truncated for length] ..."
+
+          system_prompt = (
+              "You are the Autonomous AI Code Reviewer for this enterprise repository, acting as a Principal DevSecOps and AI Architect.\n"
+              "Review the pull request git diff below and provide a concise, professional, constructive review in clean GitHub markdown.\n\n"
+              "Include the following sections:\n"
+              "### 🤖 Autonomous AI Code Review (Gemini 3.6 Flash)\n\n"
+              "1. **Summary of Changes**: 2-3 sentences explaining what this PR accomplishes.\n"
+              "2. **Security & Secrets Audit**: Verify no hardcoded API keys, private keys, or credentials are exposed.\n"
+              "3. **Architecture & Code Quality**: Critique code cleanliness, potential edge cases, and performance considerations.\n"
+              "4. **Testing & Reliability**: Evaluate test coverage or suggest testing considerations.\n"
+              "5. **Audit Verdict**: Choose one: `✅ LGTM - Ready for Lead Review` or `⚠️ Action Items Recommended`.\n\n"
+              "Keep the tone encouraging, rigorous, and executive-ready."
+          )
+
+          gemini_endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key={api_key}"
+          payload = {
+              "contents": [
+                  {
+                      "parts": [
+                          {"text": f"{system_prompt}\n\n### Git Diff to Review:\n```diff\n{diff_text}\n```"}
+                      ]
+                  }
+              ]
+          }
+
+          try:
+              req = urllib.request.Request(
+                  gemini_endpoint,
+                  data=json.dumps(payload).encode("utf-8"),
+                  headers={"Content-Type": "application/json"}
+              )
+              with urllib.request.urlopen(req, timeout=45) as resp:
+                  result = json.loads(resp.read().decode("utf-8"))
+                  review_comment = result.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+          except Exception as e:
+              print(f"Error invoking Gemini API: {e}")
+              exit(0)
+
+          if not review_comment:
+              print("Empty response from Gemini API.")
+              exit(0)
+
+          # Post comment to PR
+          comment_endpoint = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
+          comment_payload = {"body": review_comment}
+
+          try:
+              c_req = urllib.request.Request(
+                  comment_endpoint,
+                  data=json.dumps(comment_payload).encode("utf-8"),
+                  headers={
+                      "Authorization": f"Bearer {github_token}",
+                      "Accept": "application/vnd.github+json",
+                      "User-Agent": "Autonomous-AI-Reviewer"
+                  }
+              )
+              with urllib.request.urlopen(c_req, timeout=15) as c_resp:
+                  print("AI Review comment posted successfully to PR.")
+          except Exception as e:
+              print(f"Failed to post comment to GitHub PR: {e}")
+          EOF
