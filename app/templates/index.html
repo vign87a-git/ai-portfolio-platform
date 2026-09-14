@@ -429,8 +429,162 @@
             text-decoration: none;
         }
 
-        footer a:hover {
+        /* Architecture Visualizer & Code Explainer Styles */
+        .arch-visualizer-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .arch-visualizer-container {
+                grid-template-columns: 310px 1fr;
+            }
+        }
+
+        .arch-nodes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .arch-node {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            text-align: left;
+        }
+
+        .arch-node:hover {
+            border-color: var(--border-hover);
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateX(4px);
+        }
+
+        .arch-node.active {
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.12);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.2);
+        }
+
+        .arch-node-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .arch-node-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arch-node-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .arch-inspector-panel {
+            background: rgba(11, 15, 25, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .inspector-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .code-preview-box {
+            background: #070a13;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            max-height: 220px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .tradeoff-box {
+            background: rgba(99, 102, 241, 0.08);
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Live Code Explainer Module */
+        .explainer-snippet-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .snippet-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .snippet-btn:hover {
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .snippet-btn.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--accent);
             color: var(--accent);
+            font-weight: 500;
+        }
+
+        .explainer-textarea {
+            width: 100%;
+            height: 140px;
+            background: rgba(7, 10, 19, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: #f8fafc;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .explainer-textarea:focus {
+            border-color: var(--accent);
         }
     </style>
 </head>
@@ -515,6 +669,120 @@
                 <input type="password" id="apiKeyInput" class="settings-input" placeholder="Paste your personal Google AI Studio GEMINI_API_KEY" oninput="saveApiKey()">
                 <div style="margin-top: 6px; color: var(--text-muted); font-size: 0.75rem;">
                     Default works automatically with the platform's free tier key. Check the box only if you want to use your personal key from <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>.
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Architecture Visualizer & Live Code Explainer -->
+        <div class="card" id="architectureSection">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                    <span>Interactive System Architecture Visualizer</span>
+                </div>
+                <span class="pill">Click Any Node to Inspect</span>
+            </div>
+            
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 16px;">
+                Explore how the platform's multi-persona Git governance, autonomous PR review bots, decoupled CI/CD, and serverless AI engine interact. Select any architecture node to inspect its real implementation code and engineering trade-offs.
+            </p>
+
+            <div class="arch-visualizer-container">
+                <!-- Clickable Architecture Nodes -->
+                <div class="arch-nodes-list">
+                    <div class="arch-node active" id="node-governance" onclick="selectArchNode('governance')">
+                        <div class="arch-node-header">
+                            <span class="arch-node-title">🛡️ 1. Multi-Persona Git</span>
+                            <span class="feature-badge" style="margin-bottom:0; font-size:0.65rem;">SSH Auth</span>
+                        </div>
+                        <div class="arch-node-sub">Isolates developer and lead reviewer identities using host aliases.</div>
+                    </div>
+
+                    <div class="arch-node" id="node-prbot" onclick="selectArchNode('prbot')">
+                        <div class="arch-node-header">
+                            <span class="arch-node-title">🤖 2. Autonomous PR Bot</span>
+                            <span class="feature-badge" style="margin-bottom:0; font-size:0.65rem; background: rgba(168, 85, 247, 0.2); color: #c084fc;">Gemini 3.6</span>
+                        </div>
+                        <div class="arch-node-sub">Automated CI/CD security audit &amp; complexity scan on pull requests.</div>
+                    </div>
+
+                    <div class="arch-node" id="node-cicd" onclick="selectArchNode('cicd')">
+                        <div class="arch-node-header">
+                            <span class="arch-node-title">⚡ 3. Option C Pipelines</span>
+                            <span class="feature-badge" style="margin-bottom:0; font-size:0.65rem; background: rgba(34, 197, 94, 0.15); color: #4ade80;">$0.00 Infra</span>
+                        </div>
+                        <div class="arch-node-sub">Decoupled branch triggers: GitHub Pages on main, Cloud Run on gcp-production.</div>
+                    </div>
+
+                    <div class="arch-node" id="node-aiengine" onclick="selectArchNode('aiengine')">
+                        <div class="arch-node-header">
+                            <span class="arch-node-title">🧠 4. Gemini 3.6 Engine</span>
+                            <span class="feature-badge" style="margin-bottom:0; font-size:0.65rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Free Tier</span>
+                        </div>
+                        <div class="arch-node-sub">Zero-credit Free Tier key with client-side exponential backoff.</div>
+                    </div>
+                </div>
+
+                <!-- Live Architecture Inspector Panel -->
+                <div class="arch-inspector-panel">
+                    <div class="inspector-badge-row">
+                        <div>
+                            <span id="archInspectorTitle" style="font-weight: 600; font-size: 1.05rem; color: var(--text-primary);">Multi-Persona Git Identity Isolation</span>
+                            <div id="archInspectorSub" style="font-size: 0.8rem; color: var(--accent); margin-top: 2px;">SSH Host Aliasing &bull; Zero-Trust Separation</div>
+                        </div>
+                        <button class="copy-btn" onclick="copyArchCode()" style="position: static;">Copy Code</button>
+                    </div>
+
+                    <div class="code-preview-box" id="archCodePreview"># ~/.ssh/config Identity Separation
+Host github-dev
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_dev
+    IdentitiesOnly yes
+
+Host github-lead
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_lead
+    IdentitiesOnly yes</div>
+
+                    <div class="tradeoff-box" id="archTradeoffBox">
+                        <strong>Engineering Rationale &amp; Trade-off:</strong> Prevents accidental privilege escalation by routing commits through <code>vign87a-dev</code> and requiring pull request sign-offs from <code>vign87a-lead</code>. Simulates enterprise SOC2/PCI-DSS branch protection controls.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live AI Code-Explainer Section -->
+            <div style="margin-top: 28px; border-top: 1px solid var(--border); padding-top: 22px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        <span style="font-weight: 600; font-size: 1rem; color: var(--text-primary);">Live AI Code Deconstructor</span>
+                    </div>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Powered by Gemini 3.6 Flash</span>
+                </div>
+
+                <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 12px;">
+                    Select a core code snippet below or paste your own, then let the platform's AI deconstruct its architectural patterns, security controls, and design trade-offs:
+                </p>
+
+                <div class="explainer-snippet-select">
+                    <button class="snippet-btn active" id="btn-fastapi" onclick="selectExplainerSnippet('fastapi')">🐍 FastAPI Async Route</button>
+                    <button class="snippet-btn" id="btn-prbot" onclick="selectExplainerSnippet('prbot')">🤖 PR Review Diff Scanner</button>
+                    <button class="snippet-btn" id="btn-retry" onclick="selectExplainerSnippet('retry')">🔄 Exponential Backoff Loop</button>
+                </div>
+
+                <textarea id="explainerCodeInput" class="explainer-textarea" placeholder="Paste or view code snippet here..."></textarea>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <span id="explainerStatus" style="font-size: 0.82rem; color: var(--text-muted);">Ready to analyze code architecture</span>
+                    <button class="btn" id="deconstructBtn" onclick="deconstructCode()" style="padding: 8px 18px; font-size: 0.85rem;">
+                        <span>✨ Deconstruct Architecture</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </button>
+                </div>
+
+                <div id="explainerResponseBox" style="display: none; margin-top: 16px; background: #070a13; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 18px; font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; color: var(--text-primary);">
                 </div>
             </div>
         </div>
@@ -864,6 +1132,8 @@
             if (saved) {
                 document.getElementById('apiKeyInput').value = saved;
             }
+
+            selectExplainerSnippet('fastapi');
         });
 
         // System prompt that gives Gemini complete self-awareness of this repository
@@ -997,6 +1267,219 @@ Always respond professionally, authoritatively, and technically, defending these
                     btn.innerText = 'Copied!';
                     setTimeout(() => btn.innerText = 'Copy', 2000);
                 });
+            }
+        }
+
+        // Interactive Architecture Visualizer Data
+        const ARCH_DATA = {
+            governance: {
+                title: "Multi-Persona Git Identity Isolation",
+                sub: "SSH Host Aliasing • Zero-Trust Separation",
+                code: `# ~/.ssh/config Identity Separation
+Host github-dev
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_dev
+    IdentitiesOnly yes
+
+Host github-lead
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_lead
+    IdentitiesOnly yes`,
+                tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Prevents accidental privilege escalation by routing commits through <code>vign87a-dev</code> and requiring pull request sign-offs from <code>vign87a-lead</code>. Simulates enterprise SOC2/PCI-DSS branch protection controls."
+            },
+            prbot: {
+                title: "Autonomous AI PR Reviewer Bot",
+                sub: "GitHub Actions • Gemini 3.6 Flash Diff Audit",
+                code: `# .github/workflows/ai-code-review.yml
+name: Autonomous AI Code Reviewer
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  ai-code-review:
+    steps:
+      - name: Perform AI Review with Gemini 3.6 Flash
+        env:
+          GEMINI_API_KEY: ` + "$" + "{" + `{ secrets.GEMINI_API_KEY }}
+        run: |
+          git diff origin/main...HEAD > pr_diff.patch
+          python -c "import google.genai as genai; # audit pr_diff.patch..."`,
+                tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Eliminates human reviewer fatigue by automatically flagging leaked secrets, unmocked network calls, and high cyclomatic complexity before human lead approval."
+            },
+            cicd: {
+                title: "Decoupled Option C CI/CD Pipelines",
+                sub: "Branch-Isolated Workflows • $0.00 Serverless Cost",
+                code: `# Independent Pipeline Triggers (Option C)
+# deploy-pages.yml (Production Free Showcase)
+on:
+  push:
+    branches: [ "main" ]
+
+# deploy-gcp.yml (Enterprise Container Pipeline)
+on:
+  push:
+    branches: [ "gcp-production" ]
+  workflow_dispatch:`,
+                tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Branch isolation eliminates cloud billing failures on main. GitHub Pages hosts static assets permanently with 99.99% uptime, while Cloud Run is isolated strictly to production releases."
+            },
+            aiengine: {
+                title: "Gemini 3.6 Flash Serverless Integration",
+                sub: "Google AI Studio Free Tier • Resilient Exponential Backoff",
+                code: `// Resilient Client-Side Gemini 3.6 Flash Call
+const endpoint = \`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=\${apiKey}\`;
+const data = await fetchWithRetry(endpoint, requestBody, 2);
+const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;`,
+                tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Uses the verified Free Tier Gemini API key with client-side exponential backoff handling 429 rate-limits seamlessly. Protects users from unexpected credit charges while providing sub-second GenAI responses."
+            }
+        };
+
+        function selectArchNode(nodeKey) {
+            document.querySelectorAll('.arch-node').forEach(node => node.classList.remove('active'));
+            const activeNode = document.getElementById(`node-${nodeKey}`);
+            if (activeNode) activeNode.classList.add('active');
+
+            const item = ARCH_DATA[nodeKey];
+            if (item) {
+                document.getElementById('archInspectorTitle').innerText = item.title;
+                document.getElementById('archInspectorSub').innerText = item.sub;
+                document.getElementById('archCodePreview').innerText = item.code;
+                document.getElementById('archTradeoffBox').innerHTML = item.tradeoff;
+            }
+        }
+
+        function copyArchCode() {
+            const code = document.getElementById('archCodePreview').innerText;
+            if (code) {
+                navigator.clipboard.writeText(code).then(() => {
+                    const btn = document.querySelector('.arch-inspector-panel .copy-btn');
+                    btn.innerText = 'Copied!';
+                    setTimeout(() => btn.innerText = 'Copy Code', 2000);
+                });
+            }
+        }
+
+        // Live Code Explainer Snippets
+        const EXPLAINER_SNIPPETS = {
+            fastapi: `from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from google import genai
+import os
+
+app = FastAPI(title="AI Portfolio Platform")
+
+class PromptRequest(BaseModel):
+    text: str
+
+@app.post("/generate")
+async def generate_content(req: PromptRequest):
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        return {"error": "GEMINI_API_KEY environment variable is not set"}
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=req.text
+    )
+    return {"response": response.text}`,
+            prbot: `# PR Diff Extraction & Automated AI Verdict
+git fetch origin main
+git diff origin/main...HEAD > pr_diff.patch
+
+# Send raw diff to Gemini 3.6 Flash for audit
+response = client.models.generate_content(
+    model="gemini-3.6-flash",
+    contents=f"""You are an Autonomous AI Code Reviewer.
+Analyze this pull request diff for:
+1. Hardcoded API keys or secrets (CRITICAL)
+2. Breaking changes to existing tests
+3. Architectural regressions
+
+Diff:
+{pr_diff}"""
+)`,
+            retry: `// Client-Side Exponential Backoff Loop
+async function fetchWithRetry(endpoint, requestBody, maxRetries = 2) {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+        if (response.ok) return await response.json();
+        
+        // Handle 429 rate limit
+        if (response.status === 429 && attempt < maxRetries) {
+            await new Promise(r => setTimeout(r, 4000 * Math.pow(2, attempt)));
+            continue;
+        }
+        throw new Error('Request failed with status ' + response.status);
+    }
+}`
+        };
+
+        function selectExplainerSnippet(snippetKey) {
+            document.querySelectorAll('.snippet-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById(`btn-${snippetKey}`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            const input = document.getElementById('explainerCodeInput');
+            if (input && EXPLAINER_SNIPPETS[snippetKey]) {
+                input.value = EXPLAINER_SNIPPETS[snippetKey];
+            }
+        }
+
+        async function deconstructCode() {
+            const code = document.getElementById('explainerCodeInput').value.trim();
+            const status = document.getElementById('explainerStatus');
+            const respBox = document.getElementById('explainerResponseBox');
+            const btn = document.getElementById('deconstructBtn');
+
+            if (!code) {
+                status.innerText = 'Please select or paste a code snippet first.';
+                return;
+            }
+
+            const apiKey = getActiveApiKey();
+            if (!apiKey) {
+                status.innerText = 'Initializing API key, please wait a moment...';
+                return;
+            }
+
+            btn.disabled = true;
+            status.innerText = 'Deconstructing architecture with Gemini 3.6 Flash...';
+            respBox.style.display = 'block';
+            respBox.innerText = 'Analyzing architectural patterns, security controls, and design trade-offs...';
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+
+            const deconstructPrompt = `You are a Senior Principal Software Architect and Security Auditor reviewing code for Vigneshwaran's AI Portfolio Platform.
+Analyze the following code snippet and provide a concise, structured 3-part deconstruction:
+
+1. ARCHITECTURAL PATTERN: (1-2 sentences on the architectural design pattern used)
+2. SECURITY & RESILIENCE: (Key security, secret-management, or error-handling mechanisms)
+3. ENGINEERING TRADE-OFF: (Why this implementation was chosen over alternatives)
+
+Snippet to Deconstruct:
+\`\`\`
+${code}
+\`\`\``;
+
+            const requestBody = {
+                contents: [{ parts: [{ text: deconstructPrompt }] }]
+            };
+
+            try {
+                const data = await fetchWithRetry(endpoint, requestBody, 2);
+                const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No analysis generated.';
+                respBox.innerText = replyText;
+                status.innerText = 'Architecture deconstructed successfully.';
+            } catch (err) {
+                respBox.innerText = `Notice: ${err.message}\n\nTip: You can use your personal key if Google AI Studio free tier quota is full.`;
+                status.innerText = 'Analysis interrupted by rate limit.';
+            } finally {
+                btn.disabled = false;
             }
         }
     </script>
