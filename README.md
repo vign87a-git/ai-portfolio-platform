@@ -14,8 +14,18 @@
 
 ---
 
-## 🌐 Live Interactive Platform
+## 🌐 Live Interactive Platform & Direct Deep-Links
 👉 **[Experience THETRON Live](https://vign87a-git.github.io/ai-portfolio-platform/)**
+
+The platform implements a **Hybrid Deep-Linked SPA Architecture** unifying a **Sticky Cybernetic Command Bar**, a **Dynamic View Mode Switcher** (`🌐 Full Dashboard` vs `🎯 Focused Tool Workspace`), and **Client-Side Deep-Link Routing** with instant hydration:
+
+| Interactive Tool / Module | Direct Deep-Link Hash | Standalone Direct Entry URL |
+| :--- | :--- | :--- |
+| **📚 In-Browser Repository RAG Explorer** | [`/#rag`](https://vign87a-git.github.io/ai-portfolio-platform/#rag) | [`/rag.html`](https://vign87a-git.github.io/ai-portfolio-platform/rag.html) |
+| **🏛️ Architecture Visualizer & Deconstructor** | [`/#architecture`](https://vign87a-git.github.io/ai-portfolio-platform/#architecture) | [`/architecture.html`](https://vign87a-git.github.io/ai-portfolio-platform/architecture.html) |
+| **⚡ Live Telemetry & FinOps Cost Avoidance HUD** | [`/#telemetry`](https://vign87a-git.github.io/ai-portfolio-platform/#telemetry) | [`/telemetry.html`](https://vign87a-git.github.io/ai-portfolio-platform/telemetry.html) |
+| **🤖 AI Defense & Recruiter Lens Playground** | [`/#playground`](https://vign87a-git.github.io/ai-portfolio-platform/#playground) | Direct Interactive Prompt Evaluation |
+| **💼 Enterprise Projects & Competencies** | [`/#projects`](https://vign87a-git.github.io/ai-portfolio-platform/#projects) | [`/projects.html`](https://vign87a-git.github.io/ai-portfolio-platform/projects.html) |
 
 **THETRON** is a production-grade showcase of modern software engineering discipline, combining frontier **Agentic AI orchestration**, **zero-trust DevSecOps**, **multi-persona Git governance**, and **self-defending distributed architecture**—hosted with **\$0.00 infrastructure spend**.
 
