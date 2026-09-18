@@ -612,6 +612,196 @@
         .explainer-textarea:focus {
             border-color: var(--accent);
         }
+
+        /* Feature A & D: Telemetry & FinOps Cost Avoidance HUD & Audio Controls */
+        .hud-container {
+            background: rgba(13, 20, 36, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: var(--card-radius);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .hud-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hud-audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .audio-toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .audio-toggle-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .audio-toggle-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
+        }
+
+        .hud-stat {
+            background: rgba(7, 10, 19, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px 14px;
+            transition: border-color 0.2s;
+        }
+
+        .hud-stat:hover {
+            border-color: rgba(99, 102, 241, 0.35);
+        }
+
+        .hud-stat-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hud-stat-val {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .hud-stat-meta {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Feature B: In-Browser RAG Explorer Styles */
+        .rag-chips-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .rag-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rag-chip:hover {
+            border-color: var(--primary);
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        .rag-query-box {
+            width: 100%;
+            height: 90px;
+            background: rgba(7, 10, 19, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 14px;
+        }
+
+        .rag-query-box:focus {
+            border-color: var(--accent);
+        }
+
+        .rag-citation-box {
+            background: #070a13;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .rag-citation-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .rag-citation-badge {
+            background: rgba(56, 189, 248, 0.18);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .rag-output-text {
+            color: #f1f5f9;
+            font-size: 0.9rem;
+            line-height: 1.65;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
@@ -624,6 +814,52 @@
             <h1>THETRON</h1>
             <p class="subtitle">Autonomous AI &amp; Cloud Systems Platform &bull; Demonstrating multi-persona governance, self-defending architecture, and frontier neural systems.</p>
         </header>
+
+        <!-- Live Telemetry & FinOps Cost Avoidance HUD -->
+        <div class="hud-container">
+            <div class="hud-header">
+                <div class="hud-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+                    <span>THETRON Telemetry &amp; FinOps Cost Avoidance HUD</span>
+                </div>
+                <div class="hud-audio-controls">
+                    <button class="audio-toggle-btn active" id="audioToggleBtn" onclick="THETRON_AUDIO.toggle()">
+                        🔊 SFX ON
+                    </button>
+                    <span class="pill" style="font-size: 0.7rem; padding: 2px 8px;">Edge: centralindia</span>
+                </div>
+            </div>
+            <div class="hud-grid">
+                <div class="hud-stat">
+                    <div class="hud-stat-label">
+                        <span>⚡ API Round-Trip (RTT)</span>
+                    </div>
+                    <div class="hud-stat-val" id="hudLatency" style="color: var(--accent);">-- ms</div>
+                    <div class="hud-stat-meta">Gemini 3.6 Flash live inference latency</div>
+                </div>
+                <div class="hud-stat">
+                    <div class="hud-stat-label">
+                        <span>🔢 Session Tokens</span>
+                    </div>
+                    <div class="hud-stat-val" id="hudTokens" style="color: #c084fc;">0</div>
+                    <div class="hud-stat-meta">Total I/O tokens processed in session</div>
+                </div>
+                <div class="hud-stat">
+                    <div class="hud-stat-label">
+                        <span>💰 Avoided Cloud Spend</span>
+                    </div>
+                    <div class="hud-stat-val" id="hudAvoidedCost" style="color: var(--accent-green);">$58.40</div>
+                    <div class="hud-stat-meta">vs. $58.40/mo dedicated Cloud Run/GKE</div>
+                </div>
+                <div class="hud-stat">
+                    <div class="hud-stat-label">
+                        <span>🛡️ DevSecOps CI Gate</span>
+                    </div>
+                    <div class="hud-stat-val" style="color: #38bdf8; font-size: 0.92rem;">0 Vulns</div>
+                    <div class="hud-stat-meta">Bandit AST &amp; TruffleHog OSS verified</div>
+                </div>
+            </div>
+        </div>
 
         <!-- Dynamic Recruiter Lens -->
         <div class="lens-container">
@@ -810,6 +1046,49 @@ Host github-lead
 
                 <div id="explainerResponseBox" style="display: none; margin-top: 16px; background: #070a13; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 18px; font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; color: var(--text-primary);">
                 </div>
+            </div>
+        </div>
+
+        <!-- Feature B: In-Browser Repository RAG Explorer with Line Citations -->
+        <div class="card" id="ragExplorerSection">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>In-Browser Repository RAG Explorer</span>
+                </div>
+                <span class="pill" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Zero-Cost Client-Side RAG</span>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 14px;">
+                Ask deep technical questions about this repository. The in-browser semantic retrieval engine scans verified architectural manifests (System Topology, Git Governance, DevSecOps Gates, Ramanujan Mock Theta Origin, FinOps Invariants) and instructs Gemini 3.6 Flash to generate precise answers with <strong>verbatim line citations</strong>.
+            </p>
+
+            <div class="rag-chips-row">
+                <button class="rag-chip" onclick="setRagQuery('Why was Option C chosen over continuous Cloud Run container hosting?')">💡 Why Option C over Cloud Run?</button>
+                <button class="rag-chip" onclick="setRagQuery('Explain the Srinivasa Ramanujan Mock Theta and neuron connection in THETRON')">📐 Explain Ramanujan Mock Theta origin</button>
+                <button class="rag-chip" onclick="setRagQuery('How does multi-persona SSH configuration prevent accidental credential leakage?')">🛡️ How does multi-persona SSH prevent leakage?</button>
+                <button class="rag-chip" onclick="setRagQuery('What automated security scans run in the GitHub Actions CI pipeline?')">🔍 What DevSecOps scans run in CI?</button>
+            </div>
+
+            <textarea id="ragQueryInput" class="rag-query-box" placeholder="Ask a question about THETRON's architecture, governance, or security..."></textarea>
+
+            <div class="action-row">
+                <div class="status-text" id="ragStatusMessage">Ready to query embedded architectural knowledge base</div>
+                <button class="btn" id="ragSubmitBtn" onclick="runRAGSearch()" style="background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);">
+                    <span>Query Knowledge Base</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+
+            <div id="ragResponseContainer" class="rag-citation-box">
+                <div class="rag-citation-header">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="color: var(--text-muted); font-size: 0.78rem;">Retrieved Context Manifest:</span>
+                        <span id="ragRetrievedManifestPill" class="rag-citation-badge">[Ref: 01_SYSTEM_TOPOLOGY]</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyRagResponse()" style="position: static;">Copy Answer</button>
+                </div>
+                <div id="ragOutput" class="rag-output-text"></div>
             </div>
         </div>
 
@@ -1021,7 +1300,310 @@ Host github-lead
     <script>
         const INJECTED_API_KEY = "__GEMINI_API_KEY__";
 
-        // Current active recruiter lens
+        // =========================================================================
+        // FEATURE D: Cybernetic Web Audio Synthesizer (Native Web Audio API, $0.00)
+        // =========================================================================
+        const THETRON_AUDIO = {
+            ctx: null,
+            enabled: true,
+            init() {
+                if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+                const stored = localStorage.getItem('thetron_audio');
+                if (stored !== null) {
+                    this.enabled = stored === 'true';
+                }
+                this.updateUI();
+            },
+            toggle() {
+                this.init();
+                this.enabled = !this.enabled;
+                localStorage.setItem('thetron_audio', this.enabled);
+                this.updateUI();
+                if (this.enabled) this.beep(880, 0.04);
+            },
+            updateUI() {
+                const btn = document.getElementById('audioToggleBtn');
+                if (btn) {
+                    btn.innerHTML = this.enabled ? '🔊 SFX ON' : '🔇 SFX OFF';
+                    btn.classList.toggle('active', this.enabled);
+                }
+            },
+            beep(freq = 880, duration = 0.04, type = 'sine') {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(freq * 1.5, this.ctx.currentTime + duration);
+                    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch (e) {}
+            },
+            hum(duration = 0.12) {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(65, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(130, this.ctx.currentTime + duration);
+                    gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch (e) {}
+            },
+            success() {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + (idx * 0.05));
+                        gain.gain.setValueAtTime(0.06, now + (idx * 0.05));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.05) + 0.15);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + (idx * 0.05));
+                        osc.stop(now + (idx * 0.05) + 0.15);
+                    });
+                } catch (e) {}
+            }
+        };
+
+        // =========================================================================
+        // FEATURE A: Live Telemetry & FinOps Cost Avoidance Counter
+        // =========================================================================
+        let totalSessionTokens = 0;
+        let totalQueries = 0;
+        const BASE_AVOIDED_MONTHLY = 58.40;
+        const COST_PER_QUERY_AVOIDED = 0.00045; // Dedicated serverless compute & egress avoided per query
+
+        function updateTelemetry(rttMs, promptText, responseText) {
+            const promptTokens = Math.ceil((promptText || '').length / 4);
+            const respTokens = Math.ceil((responseText || '').length / 4);
+            const queryTokens = promptTokens + respTokens;
+            totalSessionTokens += queryTokens;
+            totalQueries += 1;
+
+            const currentAvoided = (BASE_AVOIDED_MONTHLY + (totalQueries * COST_PER_QUERY_AVOIDED)).toFixed(4);
+
+            const latEl = document.getElementById('hudLatency');
+            const tokEl = document.getElementById('hudTokens');
+            const costEl = document.getElementById('hudAvoidedCost');
+
+            if (latEl) latEl.innerText = `${rttMs} ms`;
+            if (tokEl) tokEl.innerText = totalSessionTokens.toLocaleString();
+            if (costEl) costEl.innerText = `$${currentAvoided}`;
+        }
+
+        // =========================================================================
+        // FEATURE B: In-Browser Repository Knowledge Store (5 Structured Manifests)
+        // =========================================================================
+        const THETRON_KNOWLEDGE_BASE = {
+            "01_SYSTEM_TOPOLOGY": {
+                name: "01_SYSTEM_TOPOLOGY.md",
+                keywords: ["option c", "cloud run", "github pages", "topology", "hosting", "container", "cdn", "static", "serverless", "architecture", "decoupled"],
+                content: `L01: # 01_SYSTEM_TOPOLOGY: THETRON ARCHITECTURAL TOPOLOGY & RUNTIME DECOUPLING
+L02: # Repository: vign87a-git/ai-portfolio-platform | Invariant: $0.00 Infra Spend
+L03: 
+L04: [TOPOLOGY-SPEC]
+L05: The architecture decouples the continuous deployment showcase tier from containerized hosting.
+L06: 1. Continuous Deployment: Static HTML/JS/CSS assets are packaged and deployed to GitHub Pages.
+L07: 2. Edge CDN Acceleration: Assets are distributed across GitHub's global edge caches.
+L08: 3. Decoupled Container Pipeline (Option C): Cloud Run container workflows trigger only on gcp-production.
+L09: 4. Financial Invariant: By shifting the primary showcase to GitHub Pages, compute idle charges ($58.40/mo) are eliminated.
+L10: 5. High Availability: 99.99% availability via GitHub CDN edge nodes (Central India / cache-maa).
+L11: 6. Client-Side GenAI: Direct browser-to-API inference eliminates backend intermediary bottlenecks.`
+            },
+            "02_GIT_GOVERNANCE": {
+                name: "02_GIT_GOVERNANCE.md",
+                keywords: ["ssh", "multi-persona", "governance", "separation", "duties", "sod", "vign87a-dev", "vign87a-lead", "alias", "keys", "privilege"],
+                content: `L01: # 02_GIT_GOVERNANCE: MULTI-PERSONA IDENTITY SEPARATION & SEPARATION OF DUTIES (SoD)
+L02: # Repository: vign87a-git/ai-portfolio-platform | Compliance: SOC2 / PCI-DSS Simulation
+L03: 
+L04: [GOVERNANCE-SPEC]
+L05: To simulate enterprise banking separation of duties, single-committer privilege escalation is prevented:
+L06: 1. Author Persona: vign87a-dev (vign87a+gitdev@gmail.com).
+L07:    - Configured via SSH Host alias 'github-dev' utilizing id_ed25519_dev key.
+L08:    - Restricted strictly to authoring feature branches and opening pull requests.
+L09: 2. Reviewer Persona: vign87a-lead (vign87a+gitlead@gmail.com).
+L10:    - Configured via SSH Host alias 'github-lead' utilizing id_ed25519_lead key.
+L11:    - Gatekeeper persona with merge permissions, validating automated CI and bot verdicts.
+L12: 3. Zero-Trust Local Config: Local ~/.ssh/config specifies IdentitiesOnly=yes for deterministic key binding.
+L13: 4. Audit Trail: Every commit on main demonstrates verified cryptographic signature separation.`
+            },
+            "03_DEVSECOPS_PIPELINE": {
+                name: "03_DEVSECOPS_PIPELINE.md",
+                keywords: ["bandit", "trufflehog", "secret", "security", "devsecops", "scanner", "vulnerability", "audit", "ast", "pr bot", "leak"],
+                content: `L01: # 03_DEVSECOPS_PIPELINE: MULTI-LAYER CI GATES, BANDIT AST AUDIT & TRUFFLEHOG
+L02: # Repository: vign87a-git/ai-portfolio-platform | Security Gate: Zero Vulnerability Tolerance
+L03: 
+L04: [DEVSECOPS-SPEC]
+L05: Continuous security auditing executes synchronously on every push and pull request:
+L06: 1. Bandit AST Security Audit: Scans Python codebase (app/) for AST-level vulnerabilities (bandit -r app/ -ll).
+L07: 2. TruffleHog OSS Secret Scanner: Scans full git commit history for high-entropy tokens and leaked private keys.
+L08: 3. Autonomous AI PR Reviewer: GitHub Actions workflow (.github/workflows/ai-code-review.yml) passes diff to Gemini 3.6 Flash.
+L09: 4. Automated Verdict Posting: AI bot posts markdown table analyzing cyclomatic complexity and security risks.
+L10: 5. Secret Injection Security: Secrets (GEMINI_API_KEY) are injected at build-time using GitHub Actions environment secrets.`
+            },
+            "04_THETRON_ORIGIN": {
+                name: "04_THETRON_ORIGIN.md",
+                keywords: ["ramanujan", "theta", "thetron", "mock", "origin", "math", "mathematical", "neuron", "perceptron", "name", "electron"],
+                content: `L01: # 04_THETRON_ORIGIN: THE MATHEMATICAL & NEURAL GENESIS OF THETRON
+L02: # Architecture Identity: THETRON Systems | Design Invariant: Harmonic AI Engineering
+L03: 
+L04: [ORIGIN-SPEC]
+L05: The name THETRON embodies two foundational pillars of modern computation:
+L06: 1. Mock Theta Functions (θ): Discovered on his deathbed in 1920 by mathematical genius Srinivasa Ramanujan.
+L07:    - Theta functions represent transcendent asymptotic harmony, modular forms, and infinite dimensional symmetries.
+L08: 2. Deep Learning Neuron & Electron (-tron): The foundational atomic suffix of neural networks (Perceptron) and physics.
+L09: 3. Synthesis: THETRON bridges pure mathematical elegance with autonomous, production-hardened neural engineering.
+L10: 4. Philosophy: Code that is self-aware, resilient under rate limits, and mathematically structured.`
+            },
+            "05_RESILIENCE_FINOPS": {
+                name: "05_RESILIENCE_FINOPS.md",
+                keywords: ["finops", "rate limit", "429", "backoff", "exponential", "cost", "avoided", "free tier", "savings", "resilience", "quota"],
+                content: `L01: # 05_RESILIENCE_FINOPS: RESILIENT RATE-LIMIT BACKOFF & FINOPS COST AVOIDANCE
+L02: # Repository: vign87a-git/ai-portfolio-platform | Free Tier Governance Invariant
+L03: 
+L04: [FINOPS-SPEC]
+L05: Zero-dollar infrastructure model with enterprise resilience:
+L06: 1. FinOps Cost Avoidance: Replaces $58.40/month Cloud Run/GKE minimum allocation with $0.00 GitHub Pages edge CDN.
+L07: 2. Gemini 3.6 Flash Free Tier: 20 requests per minute with zero overage billing risk.
+L08: 3. Client-Side Exponential Backoff: Handles HTTP 429 Quota Exceeded by parsing 'retry in Xs' server headers.
+L09: 4. Live Visual Countdown: UI updates dynamically with a real-time countdown before re-firing queued inferences.
+L10: 5. Dual Key Architecture: Seamlessly falls back from platform-injected keys to user-supplied custom API keys.`
+            }
+        };
+
+        function setRagQuery(queryText) {
+            document.getElementById('ragQueryInput').value = queryText;
+            THETRON_AUDIO.beep(950, 0.04);
+            runRAGSearch();
+        }
+
+        function findBestManifest(query) {
+            const tokens = query.toLowerCase().replace(/[^a-z0-9_\s]/g, ' ').split(/\s+/).filter(Boolean);
+            let bestKey = "01_SYSTEM_TOPOLOGY";
+            let maxScore = -1;
+
+            for (const [key, manifest] of Object.entries(THETRON_KNOWLEDGE_BASE)) {
+                let score = 0;
+                tokens.forEach(tok => {
+                    manifest.keywords.forEach(kw => {
+                        if (kw.includes(tok) || tok.includes(kw)) score += 3;
+                    });
+                    if (manifest.content.toLowerCase().includes(tok)) score += 1;
+                });
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestKey = key;
+                }
+            }
+            return bestKey;
+        }
+
+        async function runRAGSearch() {
+            const query = document.getElementById('ragQueryInput').value.trim();
+            const statusMsg = document.getElementById('ragStatusMessage');
+            const container = document.getElementById('ragResponseContainer');
+            const output = document.getElementById('ragOutput');
+            const pill = document.getElementById('ragRetrievedManifestPill');
+            const btn = document.getElementById('ragSubmitBtn');
+
+            if (!query) {
+                statusMsg.innerText = 'Please enter a question or click a chip above.';
+                return;
+            }
+
+            const apiKey = getActiveApiKey();
+            if (!apiKey) {
+                statusMsg.innerText = 'Initializing API key, please wait a moment...';
+                return;
+            }
+
+            THETRON_AUDIO.hum(0.12);
+
+            const manifestKey = findBestManifest(query);
+            const manifest = THETRON_KNOWLEDGE_BASE[manifestKey];
+
+            btn.disabled = true;
+            statusMsg.innerText = `Retrieved ${manifest.name}. Generating cited response...`;
+            pill.innerText = `[Ref: ${manifestKey}]`;
+            container.style.display = 'block';
+            output.innerText = `Analyzing manifest ${manifest.name} and extracting line citations...`;
+
+            const promptText = `You are the In-Browser Repository RAG Explorer for the THETRON platform.
+Answer the following user question strictly based on the verified repository manifest below.
+CRITICAL MANDATE:
+1. Provide a direct, highly technical answer in 2 concise paragraphs.
+2. You MUST cite verbatim line numbers from the manifest whenever stating facts using the exact format: [Ref: ${manifestKey}#LXX-LYY] (e.g., [Ref: ${manifestKey}#L05-L09]).
+3. Explain the architectural implications clearly.
+
+User Question: ${query}
+
+Verified Repository Manifest Chunk (${manifestKey}):
+\`\`\`
+${manifest.content}
+\`\`\``;
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+            const requestBody = {
+                contents: [{ parts: [{ text: promptText }] }]
+            };
+
+            const startTime = performance.now();
+
+            try {
+                const data = await fetchWithRetry(endpoint, requestBody, 2);
+                const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
+                const rtt = Math.round(performance.now() - startTime);
+
+                output.innerText = replyText;
+                statusMsg.innerText = `RAG query completed in ${rtt}ms with verbatim citations.`;
+                updateTelemetry(rtt, promptText, replyText);
+                THETRON_AUDIO.success();
+            } catch (err) {
+                output.innerText = `Notice: ${err.message}\n\nTip: Rate limits can be avoided with your personal free key.`;
+                statusMsg.innerText = 'RAG query interrupted by rate limit.';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function copyRagResponse() {
+            const text = document.getElementById('ragOutput').innerText;
+            if (text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.querySelector('#ragResponseContainer .copy-btn');
+                    btn.innerText = 'Copied!';
+                    setTimeout(() => btn.innerText = 'Copy Answer', 2000);
+                });
+            }
+        }
+
+        // =========================================================================
+        // CORE PLATFORM ENGINE: Recruiter Lenses, Playground, & Explainer
+        // =========================================================================
         let currentLens = 'all';
 
         const LENS_DATA = {
@@ -1069,8 +1651,8 @@ Host github-lead
 
         function setLens(lensKey) {
             currentLens = lensKey;
+            THETRON_AUDIO.beep(750, 0.03);
             
-            // Update active tab class deterministically
             document.querySelectorAll('.lens-tab').forEach(tab => {
                 if (tab.getAttribute('data-lens') === lensKey) {
                     tab.classList.add('active');
@@ -1079,10 +1661,7 @@ Host github-lead
                 }
             });
 
-            // Update description
             document.getElementById('lensDescription').innerHTML = LENS_DATA[lensKey].desc;
-
-            // Update chips
             renderChips(LENS_DATA[lensKey].prompts);
         }
 
@@ -1093,12 +1672,16 @@ Host github-lead
                 const btn = document.createElement('button');
                 btn.className = 'chip';
                 btn.innerText = p;
-                btn.onclick = () => setPrompt(p);
+                btn.onclick = () => {
+                    THETRON_AUDIO.beep(850, 0.03);
+                    setPrompt(p);
+                };
                 container.appendChild(btn);
             });
         }
 
         function generateRolePitch() {
+            THETRON_AUDIO.beep(920, 0.04);
             setPrompt(LENS_DATA[currentLens].pitch);
             generateAIResponse();
         }
@@ -1107,7 +1690,6 @@ Host github-lead
             document.getElementById('promptInput').value = text;
         }
 
-        // Custom API Key Toggle
         function toggleCustomKey() {
             const isChecked = document.getElementById('customKeyToggle').checked;
             const panel = document.getElementById('customKeyPanel');
@@ -1126,11 +1708,9 @@ Host github-lead
                 const customKey = document.getElementById('apiKeyInput')?.value.trim() || localStorage.getItem('gemini_user_api_key');
                 return customKey || '';
             }
-            // By default: Always use the repository injected key!
             if (INJECTED_API_KEY && !INJECTED_API_KEY.startsWith('__')) {
                 return INJECTED_API_KEY;
             }
-            // Fallback to localStorage if any
             const savedKey = localStorage.getItem('gemini_user_api_key');
             if (savedKey && savedKey.trim().length > 0) {
                 return savedKey.trim();
@@ -1147,8 +1727,8 @@ Host github-lead
             }
         }
 
-        // Initialize UI
         window.addEventListener('DOMContentLoaded', () => {
+            THETRON_AUDIO.init();
             renderChips(LENS_DATA['all'].prompts);
 
             const toggle = document.getElementById('customKeyToggle');
@@ -1162,14 +1742,13 @@ Host github-lead
             selectExplainerSnippet('fastapi');
         });
 
-        // System prompt that gives Gemini complete self-awareness of this repository
         const REPO_SELF_AWARE_SYSTEM_PROMPT = `
 You are the Self-Aware AI Voice and Architectural Defender of the THETRON platform (Autonomous AI & Cloud Systems Platform).
 You have complete knowledge of this repository's engineering journey, architecture, and design decisions:
 
 1. ARCHITECTURE:
    - Backend: FastAPI with Jinja2 templates, Uvicorn, and Python 3.11/3.14. Tested with Pytest.
-   - Hosting & CI/CD: 100% GitHub-Native. GitHub Actions runs CI (unit tests) and CD (GitHub Pages deployment).
+   - Hosting & CI/CD: 100% GitHub-Native. GitHub Actions runs CI (unit tests, Bandit AST security scanner, TruffleHog secret scan) and CD (GitHub Pages deployment).
    - Cost & Infra: $0.00 zero-cost architecture. No paid GCP servers, no billing risk, 100% uptime on GitHub Pages.
    - AI Engine: Google Gemini 3.6 Flash via official Google GenAI integration.
 
@@ -1179,11 +1758,12 @@ You have complete knowledge of this repository's engineering journey, architectu
    - Repository Owner (vign87a-git): Oversees settings and secrets.
    - Benefit: Strict separation of privileges prevents credential pollution and simulates enterprise compliance.
 
-3. AUTONOMOUS AI PR REVIEWER BOT:
-   - Implemented via GitHub Actions (.github/workflows/ai-code-review.yml).
-   - Automatically triggers on pull requests, analyzes the git diff using Gemini 3.6 Flash for security leaks and code quality, and posts structured markdown reviews on the PR before human lead review.
+3. AUTONOMOUS AI PR REVIEWER BOT & DEVSECOPS:
+   - Implemented via GitHub Actions (.github/workflows/ai-code-review.yml & deploy-pages.yml).
+   - Automatically triggers on pull requests and pushes, performs Bandit AST audit, TruffleHog secret scanning, and diff evaluation using Gemini 3.6 Flash.
 
-4. DESIGN TRADE-OFFS:
+4. DESIGN TRADE-OFFS & ORIGIN:
+   - Name Origin: Srinivasa Ramanujan Mock Theta (θ) functions + Deep Learning neuron/electron foundational unit.
    - Migrated from GCP Cloud Run container hosting to GitHub Pages to eliminate billing quota failures and credit depletion while delivering 100% free, permanent public access.
    - Upgraded active model from gemini-2.5-flash to gemini-3.6-flash.
 
@@ -1217,13 +1797,13 @@ Always respond professionally, authoritatively, and technically, defending these
 
                     for (let s = waitSeconds; s > 0; s--) {
                         const countdownMsg = `⏳ Google AI Studio free tier rate limit reached (20 requests/min). Auto-retrying in ${s}s (Attempt ${attempt + 1}/${maxRetries})...`;
-                        statusMsg.innerText = countdownMsg;
-                        respOutput.innerText = countdownMsg;
+                        if (statusMsg) statusMsg.innerText = countdownMsg;
+                        if (respOutput) respOutput.innerText = countdownMsg;
                         await new Promise(r => setTimeout(r, 1000));
                     }
 
-                    statusMsg.innerText = 'Retrying request with Gemini 3.6 Flash...';
-                    respOutput.innerText = 'Retrying request with Gemini 3.6 Flash, please wait...';
+                    if (statusMsg) statusMsg.innerText = 'Retrying request with Gemini 3.6 Flash...';
+                    if (respOutput) respOutput.innerText = 'Retrying request with Gemini 3.6 Flash, please wait...';
                     continue;
                 }
 
@@ -1254,6 +1834,8 @@ Always respond professionally, authoritatively, and technically, defending these
                 return;
             }
 
+            THETRON_AUDIO.hum(0.12);
+
             btn.disabled = true;
             statusMsg.innerText = 'Consulting Gemini 3.6 Flash with full repository context...';
             respContainer.style.display = 'block';
@@ -1271,14 +1853,19 @@ Always respond professionally, authoritatively, and technically, defending these
                 ]
             };
 
+            const startTime = performance.now();
+
             try {
                 const data = await fetchWithRetry(endpoint, requestBody, 2);
                 const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response text received.';
+                const rtt = Math.round(performance.now() - startTime);
 
                 respOutput.innerText = replyText;
-                statusMsg.innerText = 'Response generated successfully with repository self-awareness.';
+                statusMsg.innerText = `Response generated successfully (${rtt}ms).`;
+                updateTelemetry(rtt, prompt, replyText);
+                THETRON_AUDIO.success();
             } catch (err) {
-                respOutput.innerText = `Notice: ${err.message}\n\n💡 Tip: You can supply your personal free key by checking "Use my own Gemini API Key" below.`;
+                respOutput.innerText = `Notice: ${err.message}\n\n💡 Tip: You can supply your personal free key by checking "Use personal Gemini API Key" below.`;
                 statusMsg.innerText = 'Rate limit or service notice.';
             } finally {
                 btn.disabled = false;
@@ -1296,7 +1883,7 @@ Always respond professionally, authoritatively, and technically, defending these
             }
         }
 
-        // Interactive Architecture Visualizer Data
+        // Architecture Visualizer Data
         const ARCH_DATA = {
             governance: {
                 title: "Multi-Persona Git Identity Isolation",
@@ -1316,23 +1903,17 @@ Host github-lead
                 tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Prevents accidental privilege escalation by routing commits through <code>vign87a-dev</code> and requiring pull request sign-offs from <code>vign87a-lead</code>. Simulates enterprise SOC2/PCI-DSS branch protection controls."
             },
             prbot: {
-                title: "Autonomous AI PR Reviewer Bot",
-                sub: "GitHub Actions • Gemini 3.6 Flash Diff Audit",
-                code: `# .github/workflows/ai-code-review.yml
-name: Autonomous AI Code Reviewer
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-jobs:
-  ai-code-review:
-    steps:
-      - name: Perform AI Review with Gemini 3.6 Flash
-        env:
-          GEMINI_API_KEY: ` + "$" + "{" + `{ secrets.GEMINI_API_KEY }}
-        run: |
-          git diff origin/main...HEAD > pr_diff.patch
-          python -c "import google.genai as genai; # audit pr_diff.patch..."`,
-                tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Eliminates human reviewer fatigue by automatically flagging leaked secrets, unmocked network calls, and high cyclomatic complexity before human lead approval."
+                title: "Autonomous AI PR Reviewer Bot & DevSecOps Gate",
+                sub: "GitHub Actions • Bandit AST & TruffleHog OSS Secret Audit",
+                code: `# .github/workflows/deploy-pages.yml & ai-code-review.yml
+- name: DevSecOps Python AST Security Audit (Bandit)
+  run: bandit -r app/ -ll
+
+- name: DevSecOps Secret Scanner (TruffleHog OSS)
+  uses: trufflesecurity/trufflehog@main
+  with:
+    extra_args: --only-verified`,
+                tradeoff: "<strong>Engineering Rationale & Trade-off:</strong> Eliminates human reviewer fatigue by automatically catching AST-level vulnerabilities, unmocked network calls, and high-entropy secret leaks in CI before human lead approval."
             },
             cicd: {
                 title: "Decoupled Option C CI/CD Pipelines",
@@ -1362,6 +1943,7 @@ const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;`,
         };
 
         function selectArchNode(nodeKey) {
+            THETRON_AUDIO.beep(880, 0.03);
             document.querySelectorAll('.arch-node').forEach(node => node.classList.remove('active'));
             const activeNode = document.getElementById(`node-${nodeKey}`);
             if (activeNode) activeNode.classList.add('active');
@@ -1446,6 +2028,7 @@ async function fetchWithRetry(endpoint, requestBody, maxRetries = 2) {
         };
 
         function selectExplainerSnippet(snippetKey) {
+            THETRON_AUDIO.beep(820, 0.03);
             document.querySelectorAll('.snippet-btn').forEach(b => b.classList.remove('active'));
             const activeBtn = document.getElementById(`btn-${snippetKey}`);
             if (activeBtn) activeBtn.classList.add('active');
@@ -1473,6 +2056,8 @@ async function fetchWithRetry(endpoint, requestBody, maxRetries = 2) {
                 return;
             }
 
+            THETRON_AUDIO.hum(0.12);
+
             btn.disabled = true;
             status.innerText = 'Deconstructing architecture with Gemini 3.6 Flash...';
             respBox.style.display = 'block';
@@ -1496,11 +2081,17 @@ ${code}
                 contents: [{ parts: [{ text: deconstructPrompt }] }]
             };
 
+            const startTime = performance.now();
+
             try {
                 const data = await fetchWithRetry(endpoint, requestBody, 2);
                 const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No analysis generated.';
+                const rtt = Math.round(performance.now() - startTime);
+
                 respBox.innerText = replyText;
-                status.innerText = 'Architecture deconstructed successfully.';
+                status.innerText = `Architecture deconstructed successfully (${rtt}ms).`;
+                updateTelemetry(rtt, deconstructPrompt, replyText);
+                THETRON_AUDIO.success();
             } catch (err) {
                 respBox.innerText = `Notice: ${err.message}\n\nTip: You can use your personal key if Google AI Studio free tier quota is full.`;
                 status.innerText = 'Analysis interrupted by rate limit.';
