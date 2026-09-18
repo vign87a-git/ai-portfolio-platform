@@ -802,10 +802,193 @@
             line-height: 1.65;
             white-space: pre-wrap;
         }
+
+        /* Sticky Cybernetic Command Bar (Hybrid SPA Unification) */
+        .command-bar {
+            position: sticky;
+            top: 14px;
+            z-index: 1000;
+            margin-bottom: 24px;
+            backdrop-filter: blur(18px);
+            background: rgba(11, 15, 25, 0.92);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 9999px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .command-bar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brand-dock {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .brand-dock:hover {
+            opacity: 0.85;
+        }
+
+        .brand-symbol {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+        }
+
+        .nav-pills {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-pill:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .nav-pill.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+        }
+
+        .command-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-switch-btn {
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-switch-btn:hover {
+            background: rgba(56, 189, 248, 0.22);
+            color: white;
+        }
+
+        .mode-switch-btn.active-focus {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #c084fc;
+            color: #e9d5ff;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Section glow effect on jump */
+        @keyframes sectionGlow {
+            0% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+            35% { box-shadow: 0 0 24px rgba(99, 102, 241, 0.5); }
+            100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        .section-highlight {
+            animation: sectionGlow 1.4s ease-out;
+        }
+
+        /* Focused Tool Mode Support */
+        body.focused-mode .view-section {
+            display: none !important;
+        }
+
+        body.focused-mode .view-section.active-focus {
+            display: block !important;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Sticky Cybernetic Command Bar (Hybrid SPA Unification) -->
+        <nav class="command-bar" id="commandBar">
+            <div class="command-bar-inner">
+                <div class="brand-dock" onclick="setRoute('all')">
+                    <span class="brand-symbol">θ</span>
+                    <span class="brand-text">THETRON</span>
+                </div>
+                <div class="nav-pills">
+                    <button class="nav-pill active" id="pill-all" onclick="setRoute('all')">
+                        <span>🌐 All</span>
+                    </button>
+                    <button class="nav-pill" id="pill-telemetry" onclick="setRoute('telemetry')">
+                        <span>⚡ Telemetry</span>
+                    </button>
+                    <button class="nav-pill" id="pill-playground" onclick="setRoute('playground')">
+                        <span>🤖 Playground</span>
+                    </button>
+                    <button class="nav-pill" id="pill-architecture" onclick="setRoute('architecture')">
+                        <span>🏛️ Architecture</span>
+                    </button>
+                    <button class="nav-pill" id="pill-rag" onclick="setRoute('rag')">
+                        <span>📚 RAG</span>
+                    </button>
+                    <button class="nav-pill" id="pill-projects" onclick="setRoute('projects')">
+                        <span>💼 Projects</span>
+                    </button>
+                </div>
+                <div class="command-bar-actions">
+                    <button class="mode-switch-btn" id="modeSwitchBtn" onclick="toggleViewMode()" title="Toggle between Full Dashboard and Focused Tool view">
+                        <span id="modeSwitchIcon">🎯</span>
+                        <span id="modeSwitchLabel">Focus Tool</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
         <header>
             <div class="badge">
                 <span class="badge-dot"></span>
@@ -815,76 +998,79 @@
             <p class="subtitle">Autonomous AI &amp; Cloud Systems Platform &bull; Demonstrating multi-persona governance, self-defending architecture, and frontier neural systems.</p>
         </header>
 
-        <!-- Live Telemetry & FinOps Cost Avoidance HUD -->
-        <div class="hud-container">
-            <div class="hud-header">
-                <div class="hud-title">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
-                    <span>THETRON Telemetry &amp; FinOps Cost Avoidance HUD</span>
+        <!-- Telemetry & Recruiter Lens Section (Route: #telemetry) -->
+        <div id="telemetrySection" class="view-section">
+            <!-- Live Telemetry & FinOps Cost Avoidance HUD -->
+            <div class="hud-container">
+                <div class="hud-header">
+                    <div class="hud-title">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+                        <span>THETRON Telemetry &amp; FinOps Cost Avoidance HUD</span>
+                    </div>
+                    <div class="hud-audio-controls">
+                        <button class="audio-toggle-btn active" id="audioToggleBtn" onclick="THETRON_AUDIO.toggle()">
+                            🔊 SFX ON
+                        </button>
+                        <span class="pill" style="font-size: 0.7rem; padding: 2px 8px;">Edge: centralindia</span>
+                    </div>
                 </div>
-                <div class="hud-audio-controls">
-                    <button class="audio-toggle-btn active" id="audioToggleBtn" onclick="THETRON_AUDIO.toggle()">
-                        🔊 SFX ON
-                    </button>
-                    <span class="pill" style="font-size: 0.7rem; padding: 2px 8px;">Edge: centralindia</span>
+                <div class="hud-grid">
+                    <div class="hud-stat">
+                        <div class="hud-stat-label">
+                            <span>⚡ API Round-Trip (RTT)</span>
+                        </div>
+                        <div class="hud-stat-val" id="hudLatency" style="color: var(--accent);">-- ms</div>
+                        <div class="hud-stat-meta">Gemini 3.6 Flash live inference latency</div>
+                    </div>
+                    <div class="hud-stat">
+                        <div class="hud-stat-label">
+                            <span>🔢 Session Tokens</span>
+                        </div>
+                        <div class="hud-stat-val" id="hudTokens" style="color: #c084fc;">0</div>
+                        <div class="hud-stat-meta">Total I/O tokens processed in session</div>
+                    </div>
+                    <div class="hud-stat">
+                        <div class="hud-stat-label">
+                            <span>💰 Avoided Cloud Spend</span>
+                        </div>
+                        <div class="hud-stat-val" id="hudAvoidedCost" style="color: var(--accent-green);">$58.40</div>
+                        <div class="hud-stat-meta">vs. $58.40/mo dedicated Cloud Run/GKE</div>
+                    </div>
+                    <div class="hud-stat">
+                        <div class="hud-stat-label">
+                            <span>🛡️ DevSecOps CI Gate</span>
+                        </div>
+                        <div class="hud-stat-val" style="color: #38bdf8; font-size: 0.92rem;">0 Vulns</div>
+                        <div class="hud-stat-meta">Bandit AST &amp; TruffleHog OSS verified</div>
+                    </div>
                 </div>
             </div>
-            <div class="hud-grid">
-                <div class="hud-stat">
-                    <div class="hud-stat-label">
-                        <span>⚡ API Round-Trip (RTT)</span>
+
+            <!-- Dynamic Recruiter Lens -->
+            <div class="lens-container">
+                <div class="lens-header">
+                    <div class="lens-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                        <span>Dynamic Recruiter Lens: Evaluate Candidate By Role</span>
                     </div>
-                    <div class="hud-stat-val" id="hudLatency" style="color: var(--accent);">-- ms</div>
-                    <div class="hud-stat-meta">Gemini 3.6 Flash live inference latency</div>
+                    <div class="lens-tabs">
+                        <button class="lens-tab active" data-lens="all" onclick="setLens('all')">🌐 All-Rounder</button>
+                        <button class="lens-tab" data-lens="devops" onclick="setLens('devops')">☁️ Cloud & DevOps Architect</button>
+                        <button class="lens-tab" data-lens="agentic" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
+                        <button class="lens-tab" data-lens="fullstack" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
+                    </div>
                 </div>
-                <div class="hud-stat">
-                    <div class="hud-stat-label">
-                        <span>🔢 Session Tokens</span>
+                <div class="lens-summary-box">
+                    <div id="lensDescription">
+                        <strong>Comprehensive Overview:</strong> Highlights multi-persona Git governance, automated CI/CD, and real-time Gemini AI integration.
                     </div>
-                    <div class="hud-stat-val" id="hudTokens" style="color: #c084fc;">0</div>
-                    <div class="hud-stat-meta">Total I/O tokens processed in session</div>
-                </div>
-                <div class="hud-stat">
-                    <div class="hud-stat-label">
-                        <span>💰 Avoided Cloud Spend</span>
-                    </div>
-                    <div class="hud-stat-val" id="hudAvoidedCost" style="color: var(--accent-green);">$58.40</div>
-                    <div class="hud-stat-meta">vs. $58.40/mo dedicated Cloud Run/GKE</div>
-                </div>
-                <div class="hud-stat">
-                    <div class="hud-stat-label">
-                        <span>🛡️ DevSecOps CI Gate</span>
-                    </div>
-                    <div class="hud-stat-val" style="color: #38bdf8; font-size: 0.92rem;">0 Vulns</div>
-                    <div class="hud-stat-meta">Bandit AST &amp; TruffleHog OSS verified</div>
+                    <button class="lens-pitch-btn" onclick="generateRolePitch()">✨ Generate Role Pitch</button>
                 </div>
             </div>
         </div>
 
-        <!-- Dynamic Recruiter Lens -->
-        <div class="lens-container">
-            <div class="lens-header">
-                <div class="lens-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
-                    <span>Dynamic Recruiter Lens: Evaluate Candidate By Role</span>
-                </div>
-                <div class="lens-tabs">
-                    <button class="lens-tab active" data-lens="all" onclick="setLens('all')">🌐 All-Rounder</button>
-                    <button class="lens-tab" data-lens="devops" onclick="setLens('devops')">☁️ Cloud & DevOps Architect</button>
-                    <button class="lens-tab" data-lens="agentic" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
-                    <button class="lens-tab" data-lens="fullstack" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
-                </div>
-            </div>
-            <div class="lens-summary-box">
-                <div id="lensDescription">
-                    <strong>Comprehensive Overview:</strong> Highlights multi-persona Git governance, automated CI/CD, and real-time Gemini AI integration.
-                </div>
-                <button class="lens-pitch-btn" onclick="generateRolePitch()">✨ Generate Role Pitch</button>
-            </div>
-        </div>
-
-        <!-- AI Interactive Playground & Self-Aware Meta Defense -->
-        <div class="card">
+        <!-- AI Interactive Playground & Self-Aware Meta Defense (Route: #playground) -->
+        <div class="card view-section" id="playgroundSection">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -935,8 +1121,8 @@
             </div>
         </div>
 
-        <!-- Interactive Architecture Visualizer & Live Code Explainer -->
-        <div class="card" id="architectureSection">
+        <!-- Interactive Architecture Visualizer & Live Code Explainer (Route: #architecture) -->
+        <div class="card view-section" id="architectureSection">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
@@ -1049,8 +1235,8 @@ Host github-lead
             </div>
         </div>
 
-        <!-- Feature B: In-Browser Repository RAG Explorer with Line Citations -->
-        <div class="card" id="ragExplorerSection">
+        <!-- Feature B: In-Browser Repository RAG Explorer with Line Citations (Route: #rag) -->
+        <div class="card view-section" id="ragExplorerSection">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
@@ -1092,8 +1278,10 @@ Host github-lead
             </div>
         </div>
 
-        <!-- Core Technical Competencies Matrix -->
-        <div class="card">
+        <!-- Projects, Competencies & Highlights Section (Route: #projects) -->
+        <div id="projectsSection" class="view-section">
+            <!-- Core Technical Competencies Matrix -->
+            <div class="card">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -1275,8 +1463,9 @@ Host github-lead
                 </div>
             </div>
         </div>
+    </div> <!-- end projectsSection -->
 
-        <footer>
+    <footer>
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; text-align: center;">
                 <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 8px;">Let's Connect &amp; Collaborate</h3>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 500px; margin: 0 auto 16px auto;">
@@ -1388,6 +1577,121 @@ Host github-lead
                 } catch (e) {}
             }
         };
+
+        // =========================================================================
+        // HYBRID DEEP-LINKED SPA ROUTER (Options 1, 2, & 3 Combined)
+        // =========================================================================
+        let currentRoute = 'all';
+        let viewMode = localStorage.getItem('thetron_view_mode') || 'full'; // 'full' or 'focused'
+
+        const ROUTE_SECTIONS = {
+            telemetry: 'telemetrySection',
+            playground: 'playgroundSection',
+            architecture: 'architectureSection',
+            rag: 'ragExplorerSection',
+            projects: 'projectsSection'
+        };
+
+        function initRouter() {
+            applyViewModeUI();
+
+            const hash = window.location.hash.replace('#', '').toLowerCase();
+            if (hash && (ROUTE_SECTIONS[hash] || hash === 'all')) {
+                setRoute(hash, false, false);
+            } else {
+                setRoute('all', false, false);
+            }
+
+            window.addEventListener('hashchange', () => {
+                const newHash = window.location.hash.replace('#', '').toLowerCase();
+                if (newHash && (ROUTE_SECTIONS[newHash] || newHash === 'all')) {
+                    setRoute(newHash, true, false);
+                } else if (!newHash) {
+                    setRoute('all', true, false);
+                }
+            });
+        }
+
+        function toggleViewMode() {
+            viewMode = (viewMode === 'full') ? 'focused' : 'full';
+            localStorage.setItem('thetron_view_mode', viewMode);
+            applyViewModeUI();
+            THETRON_AUDIO.beep(920, 0.04);
+            setRoute(currentRoute === 'all' && viewMode === 'focused' ? 'rag' : currentRoute, false, true);
+        }
+
+        function applyViewModeUI() {
+            const btn = document.getElementById('modeSwitchBtn');
+            const icon = document.getElementById('modeSwitchIcon');
+            const label = document.getElementById('modeSwitchLabel');
+            if (!btn) return;
+
+            if (viewMode === 'focused') {
+                document.body.classList.add('focused-mode');
+                btn.classList.add('active-focus');
+                if (icon) icon.innerText = '🌐';
+                if (label) label.innerText = 'View All';
+            } else {
+                document.body.classList.remove('focused-mode');
+                btn.classList.remove('active-focus');
+                if (icon) icon.innerText = '🎯';
+                if (label) label.innerText = 'Focus Tool';
+            }
+        }
+
+        function setRoute(routeKey, triggerAudio = true, updateHash = true) {
+            if (triggerAudio) THETRON_AUDIO.beep(840, 0.03);
+            currentRoute = routeKey;
+
+            // Update nav pills
+            document.querySelectorAll('.nav-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            const activePill = document.getElementById(`pill-${routeKey}`);
+            if (activePill) activePill.classList.add('active');
+
+            if (updateHash && window.location.hash !== `#${routeKey}`) {
+                history.replaceState(null, null, `#${routeKey}`);
+            }
+
+            if (viewMode === 'focused') {
+                // Focused Tool Mode: hide all view-sections except the target
+                document.querySelectorAll('.view-section').forEach(sec => {
+                    sec.classList.remove('active-focus');
+                });
+
+                if (routeKey === 'all') {
+                    viewMode = 'full';
+                    localStorage.setItem('thetron_view_mode', 'full');
+                    applyViewModeUI();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const targetId = ROUTE_SECTIONS[routeKey];
+                    const targetEl = document.getElementById(targetId);
+                    if (targetEl) {
+                        targetEl.classList.add('active-focus');
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            } else {
+                // Full Dashboard Mode: ensure all view-sections visible, smooth-scroll to target
+                document.querySelectorAll('.view-section').forEach(sec => {
+                    sec.classList.remove('active-focus');
+                });
+
+                if (routeKey === 'all') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const targetId = ROUTE_SECTIONS[routeKey];
+                    const targetEl = document.getElementById(targetId);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        targetEl.classList.add('section-highlight');
+                        setTimeout(() => targetEl.classList.remove('section-highlight'), 1400);
+                    }
+                }
+            }
+        }
 
         // =========================================================================
         // FEATURE A: Live Telemetry & FinOps Cost Avoidance Counter
@@ -1740,6 +2044,7 @@ ${manifest.content}
             }
 
             selectExplainerSnippet('fastapi');
+            initRouter();
         });
 
         const REPO_SELF_AWARE_SYSTEM_PROMPT = `
