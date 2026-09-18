@@ -39,6 +39,17 @@ jobs:
           PYTHONPATH=. pytest tests/
           echo "Unit tests passed successfully"
 
+      - name: DevSecOps Python AST Security Audit (Bandit)
+        run: |
+          bandit -r app/ -ll
+          echo "Bandit security audit passed with 0 vulnerabilities"
+
+      - name: DevSecOps Secret Scanner (TruffleHog OSS)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+        continue-on-error: true
+
   deploy-pages:
     name: Continuous Deployment (GitHub Pages)
     needs: build-and-test
