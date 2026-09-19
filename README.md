@@ -22,6 +22,7 @@ The platform implements a **Hybrid Deep-Linked SPA Architecture** unifying a **S
 | Interactive Tool / Module | Direct Deep-Link Hash | Standalone Direct Entry URL |
 | :--- | :--- | :--- |
 | **📚 In-Browser Repository RAG Explorer** | [`/#rag`](https://vign87a-git.github.io/ai-portfolio-platform/#rag) | [`/rag.html`](https://vign87a-git.github.io/ai-portfolio-platform/rag.html) |
+| **🎓 How-To, Demo Theater & Playbooks** | [`/#demo`](https://vign87a-git.github.io/ai-portfolio-platform/#demo) | [`/demo.html`](https://vign87a-git.github.io/ai-portfolio-platform/demo.html) |
 | **🏛️ Architecture Visualizer & Deconstructor** | [`/#architecture`](https://vign87a-git.github.io/ai-portfolio-platform/#architecture) | [`/architecture.html`](https://vign87a-git.github.io/ai-portfolio-platform/architecture.html) |
 | **⚡ Live Telemetry & FinOps Cost Avoidance HUD** | [`/#telemetry`](https://vign87a-git.github.io/ai-portfolio-platform/#telemetry) | [`/telemetry.html`](https://vign87a-git.github.io/ai-portfolio-platform/telemetry.html) |
 | **🤖 AI Defense & Recruiter Lens Playground** | [`/#playground`](https://vign87a-git.github.io/ai-portfolio-platform/#playground) | Direct Interactive Prompt Evaluation |
@@ -86,6 +87,7 @@ flowchart TD
 ### 1. 🤖 Frontier GenAI & Agentic Systems
 * **Autonomous PR Reviewer**: Production GitHub Actions workflow that extracts git diffs, analyzes architecture, flags exposed secrets, and posts structured markdown reviews with zero manual intervention.
 * **In-Browser Repository RAG Explorer**: Zero-cost client-side RAG engine embedding 5 structured repository manifests. Performs semantic keyword retrieval and prompts Gemini 3.6 Flash to output verbatim line citations (e.g. `[Ref: 01_SYSTEM_TOPOLOGY#L05-L10]`).
+* **Interactive Demo Theater & Voice Playbook**: Native HTML5 Canvas + Web Speech API (`window.speechSynthesis`) procedural simulator delivering 6 module-by-module audiovisual walkthroughs, synchronized subtitles, and full architectural/operator runbooks—achieving $0.00 spend with zero video hosting bloat.
 * **Self-Aware System Context**: Embedded architectural knowledge allows Gemini 3.6 Flash to defend engineering trade-offs, discuss Git governance, and deconstruct source code in real time.
 * **Dynamic Recruiter Lens**: Role-adaptive evaluation matrix tailoring interactive prompt suites and executive summaries to hiring profiles (*Cloud & DevOps*, *Agentic AI*, *Full-Stack Python*, *All-Rounder*).
 
