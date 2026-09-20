@@ -935,12 +935,12 @@
             animation: sectionGlow 1.4s ease-out;
         }
 
-        /* Focused Tool Mode Support */
-        body.focused-mode .view-section {
+        /* Strict Single-View Architecture: Only the active section is rendered */
+        .view-section {
             display: none !important;
         }
 
-        body.focused-mode .view-section.active-focus {
+        .view-section.active-focus {
             display: block !important;
             animation: fadeIn 0.3s ease-in-out;
         }
@@ -1543,10 +1543,6 @@
                 <div class="command-bar-actions">
                     <button class="mode-switch-btn" id="autoPilotBtn" onclick="THETRON_AUTOPILOT.toggle()" style="background: rgba(168, 85, 247, 0.18); border-color: #c084fc; color: #e9d5ff;" title="Launch Auto-Pilot Interactive Platform Tour">
                         <span>🚀 Auto-Pilot Tour</span>
-                    </button>
-                    <button class="mode-switch-btn" id="modeSwitchBtn" onclick="toggleViewMode()" title="Toggle between Full Dashboard and Focused Tool view">
-                        <span id="modeSwitchIcon">🎯</span>
-                        <span id="modeSwitchLabel">Focus Tool</span>
                     </button>
                 </div>
             </div>
@@ -2593,7 +2589,6 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
         // HYBRID DEEP-LINKED SPA ROUTER (Option B Dedicated Overview Portal)
         // =========================================================================
         let currentRoute = 'overview';
-        let viewMode = localStorage.getItem('thetron_view_mode') || 'focused'; // 'focused' (default) or 'full'
 
         const ROUTE_SECTIONS = {
             overview: 'overviewSection',
@@ -2606,7 +2601,10 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
         };
 
         function initRouter() {
-            applyViewModeUI();
+            // Purge any legacy view mode state from browser localStorage
+            try {
+                localStorage.removeItem('thetron_view_mode');
+            } catch (e) {}
 
             const hash = window.location.hash.replace('#', '').toLowerCase();
             if (hash && ROUTE_SECTIONS[hash]) {
@@ -2625,41 +2623,6 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
             });
         }
 
-        function toggleViewMode() {
-            viewMode = (viewMode === 'focused') ? 'full' : 'focused';
-            localStorage.setItem('thetron_view_mode', viewMode);
-            applyViewModeUI();
-            THETRON_AUDIO.beep(920, 0.04);
-            if (viewMode === 'focused') {
-                setRoute(currentRoute || 'overview', false, true);
-            } else {
-                // In full mode, show all view sections
-                document.querySelectorAll('.view-section').forEach(sec => {
-                    sec.classList.remove('active-focus');
-                });
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function applyViewModeUI() {
-            const btn = document.getElementById('modeSwitchBtn');
-            const icon = document.getElementById('modeSwitchIcon');
-            const label = document.getElementById('modeSwitchLabel');
-            if (!btn) return;
-
-            if (viewMode === 'focused') {
-                document.body.classList.add('focused-mode');
-                btn.classList.add('active-focus');
-                if (icon) icon.innerText = '📜';
-                if (label) label.innerText = 'View All';
-            } else {
-                document.body.classList.remove('focused-mode');
-                btn.classList.remove('active-focus');
-                if (icon) icon.innerText = '🎯';
-                if (label) label.innerText = 'Focus View';
-            }
-        }
-
         function setRoute(routeKey, triggerAudio = true, updateHash = true) {
             if (triggerAudio) THETRON_AUDIO.beep(840, 0.03);
             currentRoute = routeKey;
@@ -2675,31 +2638,16 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                 history.replaceState(null, null, `#${routeKey}`);
             }
 
-            if (viewMode === 'focused') {
-                // Focused Workspace Mode: show ONLY the selected tool, zero scroll
-                document.querySelectorAll('.view-section').forEach(sec => {
-                    sec.classList.remove('active-focus');
-                });
+            // Unconditional single-view rendering: strictly hide all sections, activate only target
+            document.querySelectorAll('.view-section').forEach(sec => {
+                sec.classList.remove('active-focus');
+            });
 
-                const targetId = ROUTE_SECTIONS[routeKey] || 'overviewSection';
-                const targetEl = document.getElementById(targetId);
-                if (targetEl) {
-                    targetEl.classList.add('active-focus');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            } else {
-                // Full Dashboard Mode: ensure all view-sections visible, smooth-scroll to target
-                document.querySelectorAll('.view-section').forEach(sec => {
-                    sec.classList.remove('active-focus');
-                });
-
-                const targetId = ROUTE_SECTIONS[routeKey] || 'overviewSection';
-                const targetEl = document.getElementById(targetId);
-                if (targetEl) {
-                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    targetEl.classList.add('section-highlight');
-                    setTimeout(() => targetEl.classList.remove('section-highlight'), 1400);
-                }
+            const targetId = ROUTE_SECTIONS[routeKey] || 'overviewSection';
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                targetEl.classList.add('active-focus');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
@@ -4380,13 +4328,6 @@ ${manifest.content}
                 this.isRunning = true;
                 this.currentStep = 0;
 
-                // Ensure full view mode so all sections exist in DOM
-                if (viewMode === 'focused') {
-                    viewMode = 'full';
-                    localStorage.setItem('thetron_view_mode', 'full');
-                    applyViewModeUI();
-                }
-
                 this.renderBanner();
                 this.executeStep(0);
             },
@@ -4404,9 +4345,6 @@ ${manifest.content}
                     this.bannerEl = null;
                 }
                 THETRON_AUDIO.beep(600, 0.05);
-                viewMode = 'focused';
-                localStorage.setItem('thetron_view_mode', 'focused');
-                applyViewModeUI();
                 setRoute('overview', false, true);
             },
 
@@ -4462,9 +4400,20 @@ ${manifest.content}
                 this.updateBannerUI();
 
                 const step = this.steps[idx];
+                const sectionToRoute = {
+                    'telemetrySection': 'telemetry',
+                    'playgroundSection': 'playground',
+                    'architectureSection': 'architecture',
+                    'ragExplorerSection': 'rag',
+                    'demoSection': 'demo',
+                    'projectsSection': 'projects',
+                    'overviewSection': 'overview'
+                };
+                const route = sectionToRoute[step.targetId] || 'overview';
+                setRoute(route, false, true);
+
                 const el = document.getElementById(step.targetId);
                 if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     el.classList.add('section-highlight');
                     setTimeout(() => el.classList.remove('section-highlight'), 1200);
                 }
