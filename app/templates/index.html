@@ -1684,7 +1684,7 @@ Host github-lead
     IdentitiesOnly yes</div>
 
                     <div class="tradeoff-box" id="archTradeoffBox">
-                        <strong>Engineering Rationale &amp; Trade-off:</strong> Prevents accidental privilege escalation by routing commits through <code>vign87a-dev</code> and requiring pull request sign-offs from <code>vign87a-lead</code>. Simulates enterprise SOC2/PCI-DSS branch protection controls.
+                        <strong>Engineering Rationale &amp; Trade-off:</strong> Prevents privilege escalation by strictly enforcing bidirectional Separation of Duties (Interpretation A): <code>vign87a-dev</code> is restricted to authoring commits/PRs (cannot merge), while <code>vign87a-lead</code> is restricted to review &amp; merging (cannot author code/PRs). Enforced via <code>.githooks/</code>, <code>governance-gate.yml</code>, and <code>.github/CODEOWNERS</code>.
                     </div>
                 </div>
             </div>
@@ -1925,14 +1925,16 @@ Host github-lead
                             <li><strong>Decoupled Container Pipeline:</strong> The enterprise FastAPI backend and Docker packaging remain fully maintained in repository source, triggering container builds only on designated production releases.</li>
                         </ul>
 
-                        <h3>🛡️ Multi-Persona Git Governance &amp; Separation of Duties</h3>
+                        <h3>🛡️ Multi-Persona Git Governance &amp; Bidirectional Separation of Duties</h3>
                         <p>
-                            To prevent single-committer privilege escalation, THETRON implements cryptographic identity separation:
+                            To prevent single-committer privilege escalation, THETRON implements strict <strong>Interpretation A</strong> governance with mutual exclusivity between Developer and Lead personas across 4 defense layers:
                         </p>
                         <ul>
-                            <li><code>vign87a-dev</code>: Feature author who crafts branches, commits changes, and opens pull requests using <code>id_ed25519_dev</code>.</li>
-                            <li><code>vign87a-lead</code>: Senior technical lead who enforces reviews, audits CI gates, and signs merges using <code>id_ed25519_lead</code>.</li>
-                            <li><strong>Automated PR Review Bot:</strong> Autonomous agent that performs line-by-line diff inspection, security policy checks, and architectural validation before any PR merges.</li>
+                            <li><code>vign87a-dev</code>: Feature author who crafts branches, commits changes, and opens pull requests using <code>id_ed25519_dev</code>. Strictly prohibited from self-approving or merging PRs.</li>
+                            <li><code>vign87a-lead</code>: Senior technical lead who enforces reviews, audits CI gates, and signs merges using <code>id_ed25519_lead</code>. Strictly prohibited from authoring commits, pushing feature branches, or opening PRs.</li>
+                            <li><strong>CI Governance Gate (<code>governance-gate.yml</code>):</strong> Automated workflow that validates PR and commit authors, rejecting any PRs created by <code>vign87a-lead</code> and enforcing mandatory approval from <code>vign87a-lead</code>.</li>
+                            <li><strong>GitHub CODEOWNERS (<code>.github/CODEOWNERS</code>):</strong> Designates <code>@vign87a-lead</code> as the required code owner for all files, disallowing self-approval by the author.</li>
+                            <li><strong>Automated PR Review Bot:</strong> Autonomous agent performing line-by-line diff inspection, security policy checks, and architectural validation before any PR merges.</li>
                         </ul>
                     </div>
 
@@ -1954,7 +1956,15 @@ Host github-lead
     User git
     IdentityFile ~/.ssh/id_ed25519_lead</div>
 
-                        <h3>2. Local Python Environment &amp; Dependencies</h3>
+                        <h3>2. Install Local DevSecOps Git Hooks</h3>
+                        <p>Activate local <code>pre-commit</code> and <code>pre-push</code> hooks to enforce bidirectional SoD locally:</p>
+                        <div class="playbook-code-block"># Windows PowerShell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-hooks.ps1
+
+# Linux / macOS
+chmod +x scripts/setup-hooks.sh && ./scripts/setup-hooks.sh</div>
+
+                        <h3>3. Local Python Environment &amp; Dependencies</h3>
                         <div class="playbook-code-block"># Create and activate virtual environment
 python -m venv venv
 .\venv\Scripts\Activate.ps1   # (Linux/macOS: source venv/bin/activate)
@@ -1962,7 +1972,7 @@ python -m venv venv
 # Install production and testing dependencies
 pip install fastapi uvicorn jinja2 google-genai pytest bandit</div>
 
-                        <h3>3. Run DevSecOps AST &amp; Secret Scans Locally</h3>
+                        <h3>4. Run DevSecOps AST &amp; Secret Scans Locally</h3>
                         <div class="playbook-code-block"># Run Pytest test suite
 python -m pytest tests/ -v
 
@@ -1972,7 +1982,7 @@ python -m bandit -r app/ -ll
 # Run TruffleHog Secret Scan (Docker or binary)
 trufflehog git file://. --only-verified</div>
 
-                        <h3>4. Run FastAPI Backend Locally</h3>
+                        <h3>5. Run FastAPI Backend Locally</h3>
                         <div class="playbook-code-block"># Start local Uvicorn server with hot reload
 uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                         <p>Access the live dashboard locally at <code>http://127.0.0.1:8000</code>.</p>
@@ -2535,20 +2545,22 @@ L11: 6. Client-Side GenAI: Direct browser-to-API inference eliminates backend in
             },
             "02_GIT_GOVERNANCE": {
                 name: "02_GIT_GOVERNANCE.md",
-                keywords: ["ssh", "multi-persona", "governance", "separation", "duties", "sod", "vign87a-dev", "vign87a-lead", "alias", "keys", "privilege"],
+                keywords: ["ssh", "multi-persona", "governance", "separation", "duties", "sod", "vign87a-dev", "vign87a-lead", "alias", "keys", "privilege", "hooks", "codeowners"],
                 content: `L01: # 02_GIT_GOVERNANCE: MULTI-PERSONA IDENTITY SEPARATION & SEPARATION OF DUTIES (SoD)
 L02: # Repository: vign87a-git/ai-portfolio-platform | Compliance: SOC2 / PCI-DSS Simulation
 L03: 
-L04: [GOVERNANCE-SPEC]
+L04: [GOVERNANCE-SPEC: INTERPRETATION A - STRICT MUTUAL EXCLUSIVITY]
 L05: To simulate enterprise banking separation of duties, single-committer privilege escalation is prevented:
 L06: 1. Author Persona: vign87a-dev (vign87a+gitdev@gmail.com).
 L07:    - Configured via SSH Host alias 'github-dev' utilizing id_ed25519_dev key.
-L08:    - Restricted strictly to authoring feature branches and opening pull requests.
+L08:    - Restricted strictly to authoring feature branches and opening pull requests (self-approval and merge blocked).
 L09: 2. Reviewer Persona: vign87a-lead (vign87a+gitlead@gmail.com).
 L10:    - Configured via SSH Host alias 'github-lead' utilizing id_ed25519_lead key.
-L11:    - Gatekeeper persona with merge permissions, validating automated CI and bot verdicts.
-L12: 3. Zero-Trust Local Config: Local ~/.ssh/config specifies IdentitiesOnly=yes for deterministic key binding.
-L13: 4. Audit Trail: Every commit on main demonstrates verified cryptographic signature separation.`
+L11:    - Gatekeeper persona with review and merge permissions (cannot commit code, push feature branches, or open PRs).
+L12: 3. CI Governance Gate (.github/workflows/governance-gate.yml): Validates PR & commit authors, rejects lead PRs, mandates lead sign-off.
+L13: 4. GitHub CODEOWNERS (.github/CODEOWNERS): Mandates @vign87a-lead code ownership for all files, preventing self-approval.
+L14: 5. Local Git Hooks (.githooks/): Pre-commit and pre-push hooks enforce identity locally and block direct pushes to main.
+L15: 6. Audit Trail: Every commit on main demonstrates verified cryptographic signature separation.`
             },
             "03_DEVSECOPS_PIPELINE": {
                 name: "03_DEVSECOPS_PIPELINE.md",
@@ -4281,11 +4293,13 @@ You have complete knowledge of this repository's engineering journey, architectu
    - Cost & Infra: $0.00 zero-cost architecture. No paid GCP servers, no billing risk, 100% uptime on GitHub Pages.
    - AI Engine: Google Gemini 3.6 Flash via official Google GenAI integration.
 
-2. MULTI-PERSONA GIT GOVERNANCE:
-   - Developer Persona (vign87a-dev, vign87a+gitdev@gmail.com, SSH host github-dev): Authors feature branches, commits code, opens PRs.
-   - Lead Reviewer Persona (vign87a-lead, vign87a+gitlead@gmail.com, SSH host github-lead): Code reviewer, approves PRs, merges to main.
+2. MULTI-PERSONA GIT GOVERNANCE & BIDIRECTIONAL SEPARATION OF DUTIES (SoD):
+   - Strict Interpretation A: Mutual exclusivity between Developer and Lead personas.
+   - Developer Persona (vign87a-dev, vign87a+gitdev@gmail.com, SSH host github-dev): Authors feature branches, commits code, opens PRs. Blocked from self-approvals and merging.
+   - Lead Reviewer Persona (vign87a-lead, vign87a+gitlead@gmail.com, SSH host github-lead): Code reviewer, approves PRs, merges to main. Blocked from authoring commits, pushing feature branches, or creating PRs.
+   - Enforcement: 4-layer defense via .githooks/ (pre-commit, pre-push), .github/workflows/governance-gate.yml, .github/CODEOWNERS, and branch protection.
    - Repository Owner (vign87a-git): Oversees settings and secrets.
-   - Benefit: Strict separation of privileges prevents credential pollution and simulates enterprise compliance.
+   - Benefit: Eliminates single-committer privilege escalation, reverse-role bypasses, and simulates strict SOC2/PCI-DSS compliance.
 
 3. AUTONOMOUS AI PR REVIEWER BOT & DEVSECOPS:
    - Implemented via GitHub Actions (.github/workflows/ai-code-review.yml & deploy-pages.yml).

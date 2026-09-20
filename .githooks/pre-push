@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# THETRON DevSecOps: Local Pre-Push Governance Hook
+# Enforces Interpretation A:
+# 1. NO DIRECT PUSHES TO 'main' (by anyone).
+# 2. 'vign87a-lead' CANNOT push feature branches.
+# ==============================================================================
+
+GIT_AUTHOR_NAME=$(git config user.name)
+GIT_AUTHOR_EMAIL=$(git config user.email)
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+while read local_ref local_oid remote_ref remote_oid
+do
+    # Check if target is main
+    if [[ "$remote_ref" == "refs/heads/main" ]]; then
+        echo "========================================================================"
+        echo "🛑 [GOVERNANCE ERROR] DIRECT PUSH TO 'main' IS PROHIBITED"
+        echo "========================================================================"
+        echo "Branch protection policy prohibits direct pushes to 'main'."
+        echo "All changes must be pushed to a feature branch (feature/*) by"
+        echo "'vign87a-dev' and merged via Pull Request by 'vign87a-lead'."
+        echo "========================================================================"
+        exit 1
+    fi
+
+    # Check if lead is attempting to push feature branches
+    if [[ "$GIT_AUTHOR_EMAIL" == *"gitlead"* ]] || [[ "$GIT_AUTHOR_NAME" == *"lead"* ]]; then
+        echo "========================================================================"
+        echo "🛑 [GOVERNANCE ERROR] VIOLATION OF SEPARATION OF DUTIES (SoD)"
+        echo "========================================================================"
+        echo "Active Git Identity: '$GIT_AUTHOR_NAME' <$GIT_AUTHOR_EMAIL>"
+        echo ""
+        echo "Pursuant to strict Interpretation A governance:"
+        echo "  • 'vign87a-lead' cannot push feature branches."
+        echo "  • Feature branches must be pushed by 'vign87a-dev' via the github-dev alias."
+        echo "========================================================================"
+        exit 1
+    fi
+done
+
+exit 0

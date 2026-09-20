@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# THETRON DevSecOps: Local Pre-Commit Governance Hook
+# Enforces Interpretation A: vign87a-lead CANNOT author commits locally.
+# ==============================================================================
+
+GIT_AUTHOR_NAME=$(git config user.name)
+GIT_AUTHOR_EMAIL=$(git config user.email)
+
+if [[ "$GIT_AUTHOR_EMAIL" == *"gitlead"* ]] || [[ "$GIT_AUTHOR_NAME" == *"lead"* ]]; then
+    echo "========================================================================"
+    echo "🛑 [GOVERNANCE ERROR] VIOLATION OF SEPARATION OF DUTIES (SoD)"
+    echo "========================================================================"
+    echo "Active Git Identity: '$GIT_AUTHOR_NAME' <$GIT_AUTHOR_EMAIL>"
+    echo ""
+    echo "Pursuant to strict Interpretation A governance:"
+    echo "  • 'vign87a-lead' is an AUDIT & MERGE persona ONLY."
+    echo "  • Authoring commits as 'vign87a-lead' is strictly prohibited."
+    echo ""
+    echo "To fix this, switch your local git identity to the developer persona:"
+    echo "  git config user.name 'vign87a-dev'"
+    echo "  git config user.email 'vign87a+gitdev@gmail.com'"
+    echo "========================================================================"
+    exit 1
+fi
+
+exit 0

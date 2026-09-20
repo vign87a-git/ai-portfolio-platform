@@ -94,7 +94,12 @@ flowchart TD
 
 ### 2. 🛡️ DevSecOps & Enterprise Git Governance
 * **Automated Security CI Gate**: Integrated **Bandit AST Python Security Audit** (`bandit -r app/ -ll`) and **TruffleHog OSS Secret Scanner** in CI to guarantee 0 vulnerabilities and 0 leaked high-entropy tokens before any deployment.
-* **Separation of Duties (SoD)**: Enforces corporate-grade governance between local developer persona (`vign87a-dev`) and lead reviewer persona (`vign87a-lead`) using custom SSH host aliasing.
+* **Bidirectional Separation of Duties (Interpretation A)**: Strict, mutually exclusive Maker-Checker governance between local developer persona (`vign87a-dev`) and lead reviewer persona (`vign87a-lead`):
+  - **Developer (`vign87a-dev`)**: Author only. Commits changes and opens PRs via `github-dev` SSH alias. Self-approval and merging are strictly blocked.
+  - **Lead Reviewer (`vign87a-lead`)**: Auditor & Merger only. Reviews diffs and merges via `github-lead` SSH alias. Authoring commits, pushing feature branches, and creating PRs are strictly blocked.
+  - **CI Governance Gate (`.github/workflows/governance-gate.yml`)**: Automated CI workflow that validates PR and commit authors, rejecting any PRs created by `vign87a-lead` and requiring approval from `vign87a-lead`.
+  - **GitHub CODEOWNERS (`.github/CODEOWNERS`)**: Mandates `@vign87a-lead` sign-off for all repository files.
+  - **Local Git Hooks (`.githooks/`) & Setup Scripts (`scripts/setup-hooks.ps1`)**: Local `pre-commit` and `pre-push` hooks enforcing identity and blocking direct pushes to `main`.
 * **Least Privilege Scoping**: Automated bots operate strictly on granular `contents: read` and `pull-requests: write` permissions.
 * **In-Memory Secret Handling**: Production deployment injects API keys in CI runners via string substitution, completely preventing disk-level secret persistence.
 
