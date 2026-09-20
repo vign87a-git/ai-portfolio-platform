@@ -37,6 +37,11 @@ jobs:
           PYTHONPATH=. pytest tests/
           echo "Unit tests passed successfully"
 
+      - name: DevSecOps Python AST Security Audit (Bandit)
+        run: |
+          bandit -r app/ -ll
+          echo "Bandit security audit passed with 0 vulnerabilities"
+
   deploy-gcp:
     name: Continuous Deployment (Cloud Run)
     needs: build-and-test

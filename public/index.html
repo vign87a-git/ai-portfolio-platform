@@ -469,6 +469,16 @@
             }
         }
 
+        @media (max-width: 640px) {
+            .command-bar {
+                border-radius: 16px;
+                padding: 10px 14px;
+            }
+            .features-grid, .launchpad-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .arch-nodes-list {
             display: flex;
             flex-direction: column;
@@ -1107,6 +1117,7 @@
         .demo-btn-group {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
             gap: 6px;
         }
 
@@ -2428,13 +2439,11 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                 if (this.enabled) this.beep(880, 0.04);
             },
             updateUI() {
-                ['audioToggleBtn', 'audioToggleBtnOverview'].forEach(id => {
-                    const btn = document.getElementById(id);
-                    if (btn) {
-                        btn.innerHTML = this.enabled ? '🔊 SFX ON' : '🔇 SFX OFF';
-                        btn.classList.toggle('active', this.enabled);
-                    }
-                });
+                const btn = document.getElementById('audioToggleBtn');
+                if (btn) {
+                    btn.innerHTML = this.enabled ? '🔊 SFX ON' : '🔇 SFX OFF';
+                    btn.classList.toggle('active', this.enabled);
+                }
             },
             beep(freq = 880, duration = 0.04, type = 'sine') {
                 if (!this.enabled) return;
@@ -2638,6 +2647,11 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                 history.replaceState(null, null, `#${routeKey}`);
             }
 
+            // If leaving demo section, pause active demo theater
+            if (routeKey !== 'demo' && typeof THETRON_DEMO !== 'undefined' && THETRON_DEMO.isPlaying) {
+                THETRON_DEMO.pause();
+            }
+
             // Unconditional single-view rendering: strictly hide all sections, activate only target
             document.querySelectorAll('.view-section').forEach(sec => {
                 sec.classList.remove('active-focus');
@@ -2668,18 +2682,12 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
 
             const currentAvoided = (BASE_AVOIDED_MONTHLY + (totalQueries * COST_PER_QUERY_AVOIDED)).toFixed(4);
 
-            ['hudLatency', 'hudLatencyOverview'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = `${rttMs} ms`;
-            });
-            ['hudTokens', 'hudTokensOverview'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = totalSessionTokens.toLocaleString();
-            });
-            ['hudAvoidedCost', 'hudAvoidedCostOverview'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = `$${currentAvoided}`;
-            });
+            const elLat = document.getElementById('hudLatency');
+            if (elLat) elLat.innerText = `${rttMs} ms`;
+            const elTok = document.getElementById('hudTokens');
+            if (elTok) elTok.innerText = totalSessionTokens.toLocaleString();
+            const elCost = document.getElementById('hudAvoidedCost');
+            if (elCost) elCost.innerText = `$${currentAvoided}`;
         }
 
         // =========================================================================
@@ -2806,7 +2814,31 @@ L10: 5. Dual Key Architecture: Seamlessly falls back from platform-injected keys
 
             const apiKey = getActiveApiKey();
             if (!apiKey) {
-                statusMsg.innerText = 'Initializing API key, please wait a moment...';
+                // Client-side offline extractive retrieval from verified repository knowledge base
+                const match = findBestManifest(query);
+                const manifest = match.key ? THETRON_KNOWLEDGE_BASE[match.key] : null;
+
+                if (!manifest) {
+                    statusMsg.innerText = 'No matching repository manifest found for this query.';
+                    return;
+                }
+
+                btn.disabled = true;
+                container.style.display = 'block';
+                pill.innerText = `[Offline Extractive: ${match.key}]`;
+                statusMsg.innerText = `Extracted from ${manifest.name} (Client-Side Knowledge Base).`;
+
+                // Extract relevant lines from manifest
+                const queryTerms = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
+                const lines = manifest.content.split('\n');
+                const matchedLines = lines.filter(l => queryTerms.some(term => l.toLowerCase().includes(term)));
+                const displaySnippet = (matchedLines.length > 0 ? matchedLines.slice(0, 8) : lines.slice(3, 11)).join('\n');
+
+                output.innerText = `[Offline Extractive Mode — Verbatim Lines from Repository Manifest]\n\nQuestion: ${query}\n\nRetrieved Manifest Chunk (${manifest.name}):\n${displaySnippet}\n\n[Ref: ${match.key}#L01-L${lines.length}]\n\n💡 Tip: Connect your personal Gemini API key below for full generative reasoning and synthesis.`;
+
+                updateTelemetry(12, query, output.innerText);
+                THETRON_AUDIO.success();
+                btn.disabled = false;
                 return;
             }
 
@@ -2862,7 +2894,7 @@ ${manifest.content}
             const startTime = performance.now();
 
             try {
-                const data = await fetchWithRetry(endpoint, requestBody, 2);
+                const data = await fetchWithRetry(endpoint, requestBody, 2, statusMsg, output);
                 const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
                 const rtt = Math.round(performance.now() - startTime);
 
@@ -2951,16 +2983,7 @@ ${manifest.content}
 
             const descEl = document.getElementById('lensDescription');
             if (descEl) descEl.innerHTML = LENS_DATA[lensKey].desc;
-            const descOverviewEl = document.getElementById('lensDescriptionOverview');
-            if (descOverviewEl) descOverviewEl.innerHTML = LENS_DATA[lensKey].desc;
             renderChips(LENS_DATA[lensKey].prompts);
-        }
-
-        function launchRolePitchFromOverview() {
-            setRoute('playground');
-            setTimeout(() => {
-                generateRolePitch();
-            }, 150);
         }
 
         function renderChips(prompts) {
@@ -3373,6 +3396,7 @@ ${manifest.content}
             },
 
             tryCurrentLive() {
+                this.pause();
                 const ch = this.chapters[this.currentChapterIndex];
                 setRoute(ch.targetRoute);
             },
@@ -4294,7 +4318,7 @@ ${manifest.content}
                             THETRON_AUDIO.chirp();
                         }, 2500);
                         setTimeout(() => {
-                            selectArchNode('fastapi');
+                            selectArchNode('cicd');
                             THETRON_AUDIO.chirp();
                         }, 5000);
                     },
@@ -4505,9 +4529,9 @@ You have complete knowledge of this repository's engineering journey, architectu
 Always respond professionally, authoritatively, and technically, defending these design decisions with concrete engineering rationale.
 `;
 
-        async function fetchWithRetry(endpoint, requestBody, maxRetries = 2) {
-            const statusMsg = document.getElementById('statusMessage');
-            const respOutput = document.getElementById('responseOutput');
+        async function fetchWithRetry(endpoint, requestBody, maxRetries = 2, statusEl = null, outputEl = null) {
+            const statusMsg = statusEl || document.getElementById('statusMessage');
+            const respOutput = outputEl || document.getElementById('responseOutput');
 
             for (let attempt = 0; attempt <= maxRetries; attempt++) {
                 const response = await fetch(endpoint, {
