@@ -137,6 +137,15 @@ ai-portfolio-platform/
 ├── public/
 │   ├── favicon.svg                 # Scalable cybernetic SVG favicon
 │   └── index.html                  # Standalone SPA for GitHub Pages hosting
+├── scripts/
+│   ├── e2e_audit.py                # 91-gate rigorous platform audit suite
+│   ├── nano_validator.py           # Static DOM & HTML template validator
+│   ├── audit_naming_standards.py   # Terminology & naming standard gate
+│   ├── manage_pr.py                # Programmatic GitHub PR manager (SoD enforced)
+│   ├── run_checks.ps1              # Unified local quality runner (PowerShell)
+│   ├── run_checks.sh               # Unified local quality runner (Bash)
+│   ├── setup-hooks.ps1             # Git hook installer (PowerShell)
+│   └── setup-hooks.sh              # Git hook installer (Bash)
 ├── tests/
 │   └── test_main.py                # Pytest suite with mock client fixtures
 ├── Dockerfile                      # Container specification for Cloud Run / K8s
@@ -164,9 +173,19 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### 3. Run Automated Unit Tests
+### 3. Run Unified Local Quality Gate (All 5 Checks)
+Run Pytest unit tests, Bandit AST security scan, nano-validator, naming standards audit, and the 91-gate end-to-end platform audit in a single command:
 ```powershell
-# Execute Pytest suite
+# Windows PowerShell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_checks.ps1
+
+# Linux / macOS
+chmod +x scripts/run_checks.sh && ./scripts/run_checks.sh
+```
+
+### 4. Run Automated Unit Tests (Pytest)
+```powershell
+# Execute Pytest suite independently
 python -m pytest tests/ -v
 ```
 Expected output:

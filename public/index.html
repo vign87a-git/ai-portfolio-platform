@@ -2184,15 +2184,13 @@ python -m venv venv
 # Install production and testing dependencies
 pip install fastapi uvicorn jinja2 google-genai pytest bandit</div>
 
-                        <h3>4. Run DevSecOps AST &amp; Secret Scans Locally</h3>
-                        <div class="playbook-code-block"># Run Pytest test suite
-python -m pytest tests/ -v
+                        <h3>4. Run Unified Quality &amp; Security Gate</h3>
+                        <p>Execute all 5 quality, security, naming, and end-to-end audit checks locally in one command:</p>
+                        <div class="playbook-code-block"># Windows PowerShell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_checks.ps1
 
-# Run Bandit AST Security Scan (High & Medium Severity Gate)
-python -m bandit -r app/ -ll
-
-# Run TruffleHog Secret Scan (Docker or binary)
-trufflehog git file://. --only-verified</div>
+# Linux / macOS
+chmod +x scripts/run_checks.sh &amp;&amp; ./scripts/run_checks.sh</div>
 
                         <h3>5. Run FastAPI Backend Locally</h3>
                         <div class="playbook-code-block"># Start local Uvicorn server with hot reload
@@ -3679,7 +3677,7 @@ ${manifest.content}
                 const formulaText = this.getTypewriter('θ(q) = ∑ q^(n²) / (-q; q)_n  [Srinivasa Ramanujan, 1920]', progress, 0.3, 0.65);
                 ctx.fillText(formulaText, centerX, centerY + 112);
 
-                // Option C Invariant Card Sliding In
+                // Decoupled Edge Invariant Card Sliding In
                 if (progress > 0.5) {
                     const cardY = Math.min(centerY + 145, centerY + 185 - (progress - 0.5) * 80);
                     ctx.fillStyle = 'rgba(7, 10, 19, 0.92)';
