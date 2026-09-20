@@ -1534,9 +1534,12 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <!-- AI Interactive Playground & Self-Aware Meta Defense (Route: #playground) -->
+        <div class="card view-section" id="playgroundSection">
             <!-- Dynamic Recruiter Lens -->
-            <div class="lens-container">
+            <div class="lens-container" style="margin-bottom: 20px;">
                 <div class="lens-header">
                     <div class="lens-title">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
@@ -1556,10 +1559,7 @@
                     <button class="lens-pitch-btn" onclick="generateRolePitch()">✨ Generate Role Pitch</button>
                 </div>
             </div>
-        </div>
 
-        <!-- AI Interactive Playground & Self-Aware Meta Defense (Route: #playground) -->
-        <div class="card view-section" id="playgroundSection">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -2385,8 +2385,8 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
         // =========================================================================
         // HYBRID DEEP-LINKED SPA ROUTER (Options 1, 2, & 3 Combined)
         // =========================================================================
-        let currentRoute = 'all';
-        let viewMode = localStorage.getItem('thetron_view_mode') || 'full'; // 'full' or 'focused'
+        let currentRoute = 'playground';
+        let viewMode = localStorage.getItem('thetron_view_mode') || 'focused'; // 'focused' (default) or 'full'
 
         const ROUTE_SECTIONS = {
             telemetry: 'telemetrySection',
@@ -2404,7 +2404,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
             if (hash && (ROUTE_SECTIONS[hash] || hash === 'all')) {
                 setRoute(hash, false, false);
             } else {
-                setRoute('all', false, false);
+                setRoute('playground', false, false);
             }
 
             window.addEventListener('hashchange', () => {
@@ -2412,17 +2412,21 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                 if (newHash && (ROUTE_SECTIONS[newHash] || newHash === 'all')) {
                     setRoute(newHash, true, false);
                 } else if (!newHash) {
-                    setRoute('all', true, false);
+                    setRoute('playground', true, false);
                 }
             });
         }
 
         function toggleViewMode() {
-            viewMode = (viewMode === 'full') ? 'focused' : 'full';
+            viewMode = (viewMode === 'focused') ? 'full' : 'focused';
             localStorage.setItem('thetron_view_mode', viewMode);
             applyViewModeUI();
             THETRON_AUDIO.beep(920, 0.04);
-            setRoute(currentRoute === 'all' && viewMode === 'focused' ? 'rag' : currentRoute, false, true);
+            if (viewMode === 'focused') {
+                setRoute(currentRoute === 'all' ? 'playground' : currentRoute, false, true);
+            } else {
+                setRoute('all', false, true);
+            }
         }
 
         function applyViewModeUI() {
@@ -2434,13 +2438,13 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
             if (viewMode === 'focused') {
                 document.body.classList.add('focused-mode');
                 btn.classList.add('active-focus');
-                if (icon) icon.innerText = '🌐';
+                if (icon) icon.innerText = '📜';
                 if (label) label.innerText = 'View All';
             } else {
                 document.body.classList.remove('focused-mode');
                 btn.classList.remove('active-focus');
                 if (icon) icon.innerText = '🎯';
-                if (label) label.innerText = 'Focus Tool';
+                if (label) label.innerText = 'Focus View';
             }
         }
 
@@ -2460,7 +2464,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
             }
 
             if (viewMode === 'focused') {
-                // Focused Tool Mode: hide all view-sections except the target
+                // Focused Workspace Mode: show ONLY the selected tool, zero scroll
                 document.querySelectorAll('.view-section').forEach(sec => {
                     sec.classList.remove('active-focus');
                 });
@@ -2475,7 +2479,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                     const targetEl = document.getElementById(targetId);
                     if (targetEl) {
                         targetEl.classList.add('active-focus');
-                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                 }
             } else {
@@ -2614,8 +2618,8 @@ L10: 5. Dual Key Architecture: Seamlessly falls back from platform-injected keys
 
         function findBestManifest(query) {
             const tokens = query.toLowerCase().replace(/[^a-z0-9_\s]/g, ' ').split(/\s+/).filter(Boolean);
-            let bestKey = "01_SYSTEM_TOPOLOGY";
-            let maxScore = -1;
+            let bestKey = null;
+            let maxScore = 0;
 
             for (const [key, manifest] of Object.entries(THETRON_KNOWLEDGE_BASE)) {
                 let score = 0;
@@ -2630,7 +2634,7 @@ L10: 5. Dual Key Architecture: Seamlessly falls back from platform-injected keys
                     bestKey = key;
                 }
             }
-            return bestKey;
+            return { key: bestKey, score: maxScore };
         }
 
         async function runRAGSearch() {
@@ -2654,28 +2658,47 @@ L10: 5. Dual Key Architecture: Seamlessly falls back from platform-injected keys
 
             THETRON_AUDIO.hum(0.12);
 
-            const manifestKey = findBestManifest(query);
-            const manifest = THETRON_KNOWLEDGE_BASE[manifestKey];
+            const match = findBestManifest(query);
+            const isOutOfDomain = !match.key || match.score <= 1;
+            const manifest = match.key ? THETRON_KNOWLEDGE_BASE[match.key] : null;
 
             btn.disabled = true;
-            statusMsg.innerText = `Retrieved ${manifest.name}. Generating cited response...`;
-            pill.innerText = `[Ref: ${manifestKey}]`;
             container.style.display = 'block';
-            output.innerText = `Analyzing manifest ${manifest.name} and extracting line citations...`;
 
-            const promptText = `You are the In-Browser Repository RAG Explorer for the THETRON platform.
+            let promptText = '';
+            if (isOutOfDomain) {
+                statusMsg.innerText = 'Query outside repository manifests. Generating general knowledge answer...';
+                pill.innerText = '[General Knowledge / Out of Domain]';
+                output.innerText = 'Synthesizing response for general knowledge query...';
+
+                promptText = `You are the In-Browser RAG Explorer for the THETRON platform.
+The user asked a question that falls outside the scope of the THETRON repository manifests (which strictly document System Topology, Git Governance, DevSecOps CI gates, Ramanujan Genesis, and FinOps Telemetry).
+
+User Question: ${query}
+
+CRITICAL MANDATE:
+1. In the first line, state clearly: "*(Note: This topic falls outside the THETRON repository manifests, which index cloud topology, Git governance, DevSecOps, Ramanujan genesis, and FinOps telemetry.)*"
+2. In the next 1-2 paragraphs, answer the user's question directly, accurately, and thoroughly using general knowledge (e.g. for Pythagoras theorem: state $a^2 + b^2 = c^2$, explain the geometric interpretation of hypotenuse and right triangles, and its relevance in modern vector computing).
+3. Do NOT force-fit or cite repository manifest lines for out-of-domain queries.`;
+            } else {
+                statusMsg.innerText = `Retrieved ${manifest.name}. Generating cited response...`;
+                pill.innerText = `[Ref: ${match.key}]`;
+                output.innerText = `Analyzing manifest ${manifest.name} and extracting line citations...`;
+
+                promptText = `You are the In-Browser Repository RAG Explorer for the THETRON platform.
 Answer the following user question strictly based on the verified repository manifest below.
 CRITICAL MANDATE:
 1. Provide a direct, highly technical answer in 2 concise paragraphs.
-2. You MUST cite verbatim line numbers from the manifest whenever stating facts using the exact format: [Ref: ${manifestKey}#LXX-LYY] (e.g., [Ref: ${manifestKey}#L05-L09]).
+2. You MUST cite verbatim line numbers from the manifest whenever stating facts using the exact format: [Ref: ${match.key}#LXX-LYY] (e.g., [Ref: ${match.key}#L05-L09]).
 3. Explain the architectural implications clearly.
 
 User Question: ${query}
 
-Verified Repository Manifest Chunk (${manifestKey}):
+Verified Repository Manifest Chunk (${match.key}):
 \`\`\`
 ${manifest.content}
 \`\`\``;
+            }
 
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
             const requestBody = {
@@ -4165,6 +4188,10 @@ ${manifest.content}
                     this.bannerEl = null;
                 }
                 THETRON_AUDIO.beep(600, 0.05);
+                viewMode = 'focused';
+                localStorage.setItem('thetron_view_mode', 'focused');
+                applyViewModeUI();
+                setRoute('playground', false, true);
             },
 
             toggle() {
