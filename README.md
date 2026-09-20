@@ -2,7 +2,7 @@
 ### Autonomous AI & Cloud Systems Engineering Platform
 
 [![100% GitHub-Native Deployment](https://github.com/vign87a-git/ai-portfolio-platform/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/vign87a-git/ai-portfolio-platform/actions/workflows/deploy-pages.yml)
-[![Autonomous AI Code Reviewer](https://github.com/vign87a-git/ai-portfolio-platform/actions/workflows/ai-code-review.yml/badge.svg)](https://github.com/vign87a-git/ai-portfolio-platform/actions/workflows/ai-code-review.yml)
+[![PR DevSecOps & AI Governance Gate](https://github.com/vign87a-git/ai-portfolio-platform/actions/workflows/pr-governance-gate.yml/badge.svg)](https://github.com/vign87a-git/ai-portfolio-platform/actions/workflows/pr-governance-gate.yml)
 ![DevSecOps Gate](https://img.shields.io/badge/Security%20Gate-Bandit%20AST%20%7C%20TruffleHog%20OSS-brightgreen.svg?logo=security)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.14-3776AB.svg?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg?logo=fastapi&logoColor=white)
@@ -56,7 +56,7 @@ flowchart TD
     end
 
     subgraph Bot ["Autonomous AI Mentorship & Review"]
-        PR --> ActionBot["GitHub Actions (.github/workflows/ai-code-review.yml)"]
+        PR --> ActionBot["GitHub Actions (.github/workflows/pr-governance-gate.yml)"]
         ActionBot --> DiffEngine["Extracts Git Diff (Zero-Dependency Python)"]
         DiffEngine --> GeminiAudit["Gemini 3.6 Flash DevSecOps System Prompt"]
         GeminiAudit --> PRComment["Auto-posts Structured Audit & Verdict to PR"]
@@ -97,7 +97,7 @@ flowchart TD
 * **Bidirectional Separation of Duties (Interpretation A)**: Strict, mutually exclusive Maker-Checker governance between local developer persona (`vign87a-dev`) and lead reviewer persona (`vign87a-lead`):
   - **Developer (`vign87a-dev`)**: Author only. Commits changes and opens PRs via `github-dev` SSH alias. Self-approval and merging are strictly blocked.
   - **Lead Reviewer (`vign87a-lead`)**: Auditor & Merger only. Reviews diffs and merges via `github-lead` SSH alias. Authoring commits, pushing feature branches, and creating PRs are strictly blocked.
-  - **CI Governance Gate (`.github/workflows/governance-gate.yml`)**: Automated CI workflow that validates PR and commit authors, rejecting any PRs created by `vign87a-lead` and requiring approval from `vign87a-lead`.
+  - **PR DevSecOps & AI Governance Gate (`.github/workflows/pr-governance-gate.yml`)**: Consolidated CI workflow validating SoD personas, commit authors, mandatory lead approvals, and executing Gemini 3.6 Flash diff reviews.
   - **GitHub CODEOWNERS (`.github/CODEOWNERS`)**: Mandates `@vign87a-lead` sign-off for all repository files.
   - **Local Git Hooks (`.githooks/`) & Setup Scripts (`scripts/setup-hooks.ps1`)**: Local `pre-commit` and `pre-push` hooks enforcing identity and blocking direct pushes to `main`.
 * **Least Privilege Scoping**: Automated bots operate strictly on granular `contents: read` and `pull-requests: write` permissions.
@@ -125,7 +125,7 @@ flowchart TD
 ai-portfolio-platform/
 ├── .github/
 │   └── workflows/
-│       ├── ai-code-review.yml      # Autonomous AI PR Reviewer Bot (Gemini 3.6 Flash)
+│       ├── pr-governance-gate.yml  # Consolidated PR DevSecOps, SoD Gate & AI Code Reviewer
 │       ├── deploy-pages.yml        # 100% Free GitHub Pages CI/CD Deployment
 │       └── deploy-gcp.yml          # Isolated GCP Cloud Run Workflow (gcp-production)
 ├── app/

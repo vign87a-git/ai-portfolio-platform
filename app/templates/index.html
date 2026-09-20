@@ -1684,7 +1684,7 @@ Host github-lead
     IdentitiesOnly yes</div>
 
                     <div class="tradeoff-box" id="archTradeoffBox">
-                        <strong>Engineering Rationale &amp; Trade-off:</strong> Prevents privilege escalation by strictly enforcing bidirectional Separation of Duties (Interpretation A): <code>vign87a-dev</code> is restricted to authoring commits/PRs (cannot merge), while <code>vign87a-lead</code> is restricted to review &amp; merging (cannot author code/PRs). Enforced via <code>.githooks/</code>, <code>governance-gate.yml</code>, and <code>.github/CODEOWNERS</code>.
+                        <strong>Engineering Rationale &amp; Trade-off:</strong> Prevents privilege escalation by strictly enforcing bidirectional Separation of Duties (Interpretation A): <code>vign87a-dev</code> is restricted to authoring commits/PRs (cannot merge), while <code>vign87a-lead</code> is restricted to review &amp; merging (cannot author code/PRs). Enforced via <code>.githooks/</code>, <code>pr-governance-gate.yml</code>, and <code>.github/CODEOWNERS</code>.
                     </div>
                 </div>
             </div>
@@ -1932,7 +1932,7 @@ Host github-lead
                         <ul>
                             <li><code>vign87a-dev</code>: Feature author who crafts branches, commits changes, and opens pull requests using <code>id_ed25519_dev</code>. Strictly prohibited from self-approving or merging PRs.</li>
                             <li><code>vign87a-lead</code>: Senior technical lead who enforces reviews, audits CI gates, and signs merges using <code>id_ed25519_lead</code>. Strictly prohibited from authoring commits, pushing feature branches, or opening PRs.</li>
-                            <li><strong>CI Governance Gate (<code>governance-gate.yml</code>):</strong> Automated workflow that validates PR and commit authors, rejecting any PRs created by <code>vign87a-lead</code> and enforcing mandatory approval from <code>vign87a-lead</code>.</li>
+                            <li><strong>PR DevSecOps &amp; AI Governance Gate (<code>pr-governance-gate.yml</code>):</strong> Consolidated workflow validating SoD personas, commit authors, mandatory lead approvals, and executing Gemini 3.6 Flash diff reviews.</li>
                             <li><strong>GitHub CODEOWNERS (<code>.github/CODEOWNERS</code>):</strong> Designates <code>@vign87a-lead</code> as the required code owner for all files, disallowing self-approval by the author.</li>
                             <li><strong>Automated PR Review Bot:</strong> Autonomous agent performing line-by-line diff inspection, security policy checks, and architectural validation before any PR merges.</li>
                         </ul>
@@ -2104,7 +2104,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                     <span class="feature-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3);">🤖 Automated DevSecOps</span>
                 </div>
                 <div class="project-description">
-                    A fully autonomous GitHub Actions workflow (<code>.github/workflows/ai-code-review.yml</code>) that intercepts every pull request, analyzes raw git diffs using Google Gemini 3.6 Flash, audits code against security vulnerabilities and performance bottlenecks, and posts structured markdown reviews before human approval.
+                    A fully autonomous GitHub Actions workflow (<code>.github/workflows/pr-governance-gate.yml</code>) that intercepts every pull request, enforces Separation of Duties, analyzes raw git diffs using Google Gemini 3.6 Flash, audits code against security vulnerabilities, and posts structured markdown reviews before human approval.
                 </div>
                 <div class="project-meta-row">
                     <div class="skill-tag-list">
@@ -2114,7 +2114,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                         <span class="skill-tag">DevSecOps</span>
                     </div>
                     <div class="project-actions">
-                        <a href="https://github.com/vign87a-git/ai-portfolio-platform/blob/main/.github/workflows/ai-code-review.yml" target="_blank" class="project-action-btn">
+                        <a href="https://github.com/vign87a-git/ai-portfolio-platform/blob/main/.github/workflows/pr-governance-gate.yml" target="_blank" class="project-action-btn">
                             <span>📜 View Workflow YAML</span>
                         </a>
                     </div>
@@ -2561,7 +2561,7 @@ L08:    - Restricted strictly to authoring feature branches and opening pull req
 L09: 2. Reviewer Persona: vign87a-lead (vign87a+gitlead@gmail.com).
 L10:    - Configured via SSH Host alias 'github-lead' utilizing id_ed25519_lead key.
 L11:    - Gatekeeper persona with review and merge permissions (cannot commit code, push feature branches, or open PRs).
-L12: 3. CI Governance Gate (.github/workflows/governance-gate.yml): Validates PR & commit authors, rejects lead PRs, mandates lead sign-off.
+L12: 3. PR DevSecOps Gate (.github/workflows/pr-governance-gate.yml): Validates PR & commit authors, rejects lead PRs, mandates lead sign-off.
 L13: 4. GitHub CODEOWNERS (.github/CODEOWNERS): Mandates @vign87a-lead code ownership for all files, preventing self-approval.
 L14: 5. Local Git Hooks (.githooks/): Pre-commit and pre-push hooks enforce identity locally and block direct pushes to main.
 L15: 6. Audit Trail: Every commit on main demonstrates verified cryptographic signature separation.`
@@ -4324,12 +4324,12 @@ You have complete knowledge of this repository's engineering journey, architectu
    - Strict Interpretation A: Mutual exclusivity between Developer and Lead personas.
    - Developer Persona (vign87a-dev, vign87a+gitdev@gmail.com, SSH host github-dev): Authors feature branches, commits code, opens PRs. Blocked from self-approvals and merging.
    - Lead Reviewer Persona (vign87a-lead, vign87a+gitlead@gmail.com, SSH host github-lead): Code reviewer, approves PRs, merges to main. Blocked from authoring commits, pushing feature branches, or creating PRs.
-   - Enforcement: 4-layer defense via .githooks/ (pre-commit, pre-push), .github/workflows/governance-gate.yml, .github/CODEOWNERS, and branch protection.
+   - Enforcement: 4-layer defense via .githooks/ (pre-commit, pre-push), .github/workflows/pr-governance-gate.yml, .github/CODEOWNERS, and branch protection.
    - Repository Owner (vign87a-git): Oversees settings and secrets.
    - Benefit: Eliminates single-committer privilege escalation, reverse-role bypasses, and simulates strict SOC2/PCI-DSS compliance.
 
 3. AUTONOMOUS AI PR REVIEWER BOT & DEVSECOPS:
-   - Implemented via GitHub Actions (.github/workflows/ai-code-review.yml & deploy-pages.yml).
+   - Implemented via GitHub Actions (.github/workflows/pr-governance-gate.yml & deploy-pages.yml).
    - Automatically triggers on pull requests and pushes, performs Bandit AST audit, TruffleHog secret scanning, and diff evaluation using Gemini 3.6 Flash.
 
 4. DESIGN TRADE-OFFS & ORIGIN:
@@ -4475,7 +4475,7 @@ Host github-lead
             prbot: {
                 title: "Autonomous AI PR Reviewer Bot & DevSecOps Gate",
                 sub: "GitHub Actions • Bandit AST & TruffleHog OSS Secret Audit",
-                code: `# .github/workflows/deploy-pages.yml & ai-code-review.yml
+                code: `# .github/workflows/deploy-pages.yml & pr-governance-gate.yml
 - name: DevSecOps Python AST Security Audit (Bandit)
   run: bandit -r app/ -ll
 
