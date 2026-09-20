@@ -1,0 +1,183 @@
+name: Separation of Duties (SoD) Governance Gate
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  statuses: write
+
+jobs:
+  sod-governance-audit:
+    name: SoD Persona & Authorization Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Perform Separation of Duties (SoD) Verification
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python - << 'EOF'
+          import os
+          import sys
+          import json
+          import urllib.request
+          import urllib.error
+
+          github_token = os.environ.get("GITHUB_TOKEN")
+          pr_number = os.environ.get("PR_NUMBER")
+          pr_author = os.environ.get("PR_AUTHOR", "").strip()
+          repo = os.environ.get("REPO", "").strip()
+
+          AUTHORIZED_DEVELOPER = "vign87a-dev"
+          AUTHORIZED_LEAD = "vign87a-lead"
+          DEVELOPER_EMAIL = "vign87a+gitdev@gmail.com"
+          LEAD_EMAIL = "vign87a+gitlead@gmail.com"
+
+          violations = []
+          warnings = []
+
+          print("=" * 70)
+          print("🛡️ THETRON DEVSecOps: SEPARATION OF DUTIES (SoD) AUDIT")
+          print("=" * 70)
+          print(f"Repository:   {repo}")
+          print(f"PR Number:    #{pr_number}")
+          print(f"PR Author:    {pr_author}")
+          print("-" * 70)
+
+          # ----------------------------------------------------------------------
+          # CHECK 1: PR Author Identity
+          # ----------------------------------------------------------------------
+          if pr_author == AUTHORIZED_LEAD:
+              violations.append(
+                  f"❌ **PR Author Violation**: PR was opened by `{AUTHORIZED_LEAD}`. "
+                  f"Pursuant to strict Separation of Duties (Interpretation A), `{AUTHORIZED_LEAD}` "
+                  f"is strictly an Audit & Merge persona and is **prohibited from creating Pull Requests**."
+              )
+          elif pr_author != AUTHORIZED_DEVELOPER:
+              violations.append(
+                  f"❌ **Unauthorized PR Author**: PR was opened by `{pr_author}`. "
+                  f"Only `{AUTHORIZED_DEVELOPER}` is authorized to create feature branches and open Pull Requests."
+              )
+          else:
+              print(f"✅ Check 1: PR author is verified as '{AUTHORIZED_DEVELOPER}'.")
+
+          # ----------------------------------------------------------------------
+          # CHECK 2: Commit Author Verification
+          # ----------------------------------------------------------------------
+          headers = {
+              "Authorization": f"Bearer {github_token}",
+              "Accept": "application/vnd.github+json",
+              "User-Agent": "THETRON-Governance-Gate"
+          }
+
+          commits_url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/commits"
+          try:
+              req = urllib.request.Request(commits_url, headers=headers)
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  commits = json.loads(resp.read().decode("utf-8"))
+                  print(f"Auditing {len(commits)} commit(s) in PR #{pr_number}...")
+
+                  for c in commits:
+                      sha = c.get("sha", "")[:7]
+                      commit_data = c.get("commit", {})
+                      author_info = commit_data.get("author", {})
+                      author_name = author_info.get("name", "")
+                      author_email = author_info.get("email", "")
+                      author_login = c.get("author", {}).get("login", "") if c.get("author") else ""
+
+                      print(f"  • Commit {sha}: Author='{author_name}' <{author_email}> (login: {author_login})")
+
+                      if author_email.lower() == LEAD_EMAIL.lower() or author_login == AUTHORIZED_LEAD or AUTHORIZED_LEAD in author_name:
+                          violations.append(
+                              f"❌ **Commit Author Violation**: Commit `{sha}` was authored by `{AUTHORIZED_LEAD}`. "
+                              f"`{AUTHORIZED_LEAD}` is prohibited from authoring commits. All commits must originate from `{AUTHORIZED_DEVELOPER}`."
+                          )
+          except Exception as e:
+              print(f"⚠️ Warning: Could not retrieve commits via GitHub API: {e}")
+
+          # ----------------------------------------------------------------------
+          # CHECK 3: PR Review & Approval Verification
+          # ----------------------------------------------------------------------
+          reviews_url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/reviews"
+          lead_approved = False
+
+          try:
+              req = urllib.request.Request(reviews_url, headers=headers)
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  reviews = json.loads(resp.read().decode("utf-8"))
+                  print(f"Auditing {len(reviews)} review(s) in PR #{pr_number}...")
+
+                  for r in reviews:
+                      reviewer = r.get("user", {}).get("login", "")
+                      state = r.get("state", "")
+
+                      print(f"  • Review by @{reviewer}: State={state}")
+
+                      # Self-approval check
+                      if reviewer == AUTHORIZED_DEVELOPER and state == "APPROVED":
+                          violations.append(
+                              f"❌ **Self-Approval Violation**: `{AUTHORIZED_DEVELOPER}` attempted to approve their own PR. "
+                              f"Developers cannot approve their own pull requests."
+                          )
+
+                      # Lead approval check
+                      if reviewer == AUTHORIZED_LEAD and state == "APPROVED":
+                          lead_approved = True
+
+          except Exception as e:
+              print(f"⚠️ Warning: Could not retrieve reviews via GitHub API: {e}")
+
+          if not lead_approved:
+              warnings.append(
+                  f"⏳ **Awaiting Lead Approval**: Mandatory review and sign-off from `@{AUTHORIZED_LEAD}` "
+                  f"is required before this PR can be merged."
+              )
+
+          # ----------------------------------------------------------------------
+          # Report & Enforce
+          # ----------------------------------------------------------------------
+          print("-" * 70)
+          if violations:
+              print("🛑 GOVERNANCE AUDIT FAILED WITH VIOLATIONS:")
+              for v in violations:
+                  print(f"  - {v}")
+
+              # Post failure comment to PR
+              comment_url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
+              comment_body = (
+                  "### 🛑 THETRON DevSecOps: Separation of Duties (SoD) Violation\n\n"
+                  + "\n\n".join(violations)
+                  + "\n\n---\n"
+                  + f"**Mandatory Policy (Interpretation A)**:\n"
+                  + f"- **Developer (`{AUTHORIZED_DEVELOPER}`)**: Authors feature branches, commits code, and creates Pull Requests.\n"
+                  + f"- **Lead (`{AUTHORIZED_LEAD}`)**: Reviews code, enforces CI security gates, and merges Pull Requests.\n"
+                  + f"- **Mutual Exclusivity**: Roles cannot be swapped or combined."
+              )
+              try:
+                  c_req = urllib.request.Request(
+                      comment_url,
+                      data=json.dumps({"body": comment_body}).encode("utf-8"),
+                      headers={"Content-Type": "application/json", **headers}
+                  )
+                  urllib.request.urlopen(c_req, timeout=15)
+              except Exception as e:
+                  print(f"Failed to post comment: {e}")
+
+              sys.exit(1)
+
+          if not lead_approved:
+              print("⏳ PENDING: All author invariants passed. Awaiting sign-off from vign87a-lead.")
+              # We exit with code 1 so the required status check stays red/failing until vign87a-lead approves!
+              sys.exit(1)
+
+          print("✅ SUCCESS: Separation of Duties (SoD) verified. Approved by vign87a-lead.")
+          sys.exit(0)
+          EOF

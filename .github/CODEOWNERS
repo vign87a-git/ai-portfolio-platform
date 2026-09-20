@@ -1,0 +1,13 @@
+# ==============================================================================
+# THETRON Multi-Persona Governance: Code Ownership & Separation of Duties (SoD)
+# ==============================================================================
+# Pursuant to strict "Interpretation A" Separation of Duties:
+# - Maker:   vign87a-dev (Feature author, developer)
+# - Checker: vign87a-lead (Lead reviewer, approver, merger)
+#
+# All files in this repository require mandatory review and approval from
+# @vign87a-lead before any pull request can be merged into main.
+# Self-approval by vign87a-dev is strictly prohibited by GitHub branch rules.
+# ==============================================================================
+
+* @vign87a-lead
