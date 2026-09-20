@@ -1508,7 +1508,7 @@
         }
     </style>
 </head>
-<body>
+<body class="focused-mode">
     <div class="container">
         <!-- Sticky Cybernetic Command Bar (Hybrid SPA Unification) -->
         <nav class="command-bar" id="commandBar">
@@ -1594,67 +1594,7 @@
                 </div>
             </div>
 
-            <!-- Live Telemetry & FinOps Ribbon -->
-            <div class="hud-container" style="margin-bottom: 24px;">
-                <div class="hud-header">
-                    <div class="hud-title">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
-                        <span>Live Telemetry &amp; FinOps Cost Avoidance HUD</span>
-                    </div>
-                    <div class="hud-audio-controls">
-                        <button class="audio-toggle-btn active" id="audioToggleBtnOverview" onclick="THETRON_AUDIO.toggle()">
-                            🔊 SFX ON
-                        </button>
-                        <span class="pill" style="font-size: 0.7rem; padding: 2px 8px;">Edge: centralindia</span>
-                    </div>
-                </div>
-                <div class="hud-grid">
-                    <div class="hud-stat">
-                        <div class="hud-stat-label"><span>⚡ API Round-Trip (RTT)</span></div>
-                        <div class="hud-stat-val" id="hudLatencyOverview" style="color: var(--accent);">-- ms</div>
-                        <div class="hud-stat-meta">Gemini 3.6 Flash live inference latency</div>
-                    </div>
-                    <div class="hud-stat">
-                        <div class="hud-stat-label"><span>🔢 Session Tokens</span></div>
-                        <div class="hud-stat-val" id="hudTokensOverview" style="color: #c084fc;">0</div>
-                        <div class="hud-stat-meta">Total I/O tokens processed in session</div>
-                    </div>
-                    <div class="hud-stat">
-                        <div class="hud-stat-label"><span>💰 Avoided Cloud Spend</span></div>
-                        <div class="hud-stat-val" id="hudAvoidedCostOverview" style="color: var(--accent-green);">$58.40</div>
-                        <div class="hud-stat-meta">vs. $58.40/mo dedicated Cloud Run/GKE</div>
-                    </div>
-                    <div class="hud-stat">
-                        <div class="hud-stat-label"><span>🛡️ DevSecOps CI Gate</span></div>
-                        <div class="hud-stat-val" style="color: #38bdf8; font-size: 0.92rem;">0 Vulns</div>
-                        <div class="hud-stat-meta">Bandit AST &amp; TruffleHog OSS verified</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dynamic Recruiter Lens -->
-            <div class="lens-container" style="margin-bottom: 24px;">
-                <div class="lens-header">
-                    <div class="lens-title">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
-                        <span>Dynamic Recruiter Lens: Evaluate Candidate By Role</span>
-                    </div>
-                    <div class="lens-tabs">
-                        <button class="lens-tab active" data-lens="all" onclick="setLens('all')">🌐 All-Rounder</button>
-                        <button class="lens-tab" data-lens="devops" onclick="setLens('devops')">☁️ Cloud &amp; DevOps Architect</button>
-                        <button class="lens-tab" data-lens="agentic" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
-                        <button class="lens-tab" data-lens="fullstack" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
-                    </div>
-                </div>
-                <div class="lens-summary-box">
-                    <div id="lensDescriptionOverview">
-                        <strong>Comprehensive Overview:</strong> Highlights multi-persona Git governance, automated CI/CD, and real-time Gemini AI integration.
-                    </div>
-                    <button class="lens-pitch-btn" onclick="launchRolePitchFromOverview()">✨ Generate Role Pitch in Playground ➔</button>
-                </div>
-            </div>
-
-            <!-- 5 Tool Launchpad Cards -->
+            <!-- 6 Tool Launchpad Cards -->
             <div style="margin-top: 10px; margin-bottom: 8px;">
                 <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -1666,7 +1606,21 @@
             </div>
 
             <div class="launchpad-grid">
-                <!-- 1. Playground -->
+                <!-- 1. Telemetry -->
+                <div class="launchpad-card">
+                    <div>
+                        <div class="launchpad-card-header">
+                            <span class="launchpad-card-title">⚡ Telemetry &amp; FinOps HUD</span>
+                            <span class="pill" style="font-size: 0.7rem;">Live Metrics</span>
+                        </div>
+                        <div class="launchpad-card-desc">
+                            Real-time API round-trip latency, session token counter, and cumulative avoided monthly cloud spend.
+                        </div>
+                    </div>
+                    <button class="launchpad-btn" onclick="setRoute('telemetry')">Open Telemetry HUD ➔</button>
+                </div>
+
+                <!-- 2. Playground -->
                 <div class="launchpad-card">
                     <div>
                         <div class="launchpad-card-header">
@@ -1674,13 +1628,13 @@
                             <span class="pill" style="font-size: 0.7rem;">Gemini 3.6</span>
                         </div>
                         <div class="launchpad-card-desc">
-                            Challenge Gemini 3.6 Flash on architecture decisions, adversarial prompt injections, and meta-defense. Includes custom API key support.
+                            Challenge Gemini 3.6 Flash on architecture decisions, adversarial prompt injections, and recruiter lenses.
                         </div>
                     </div>
                     <button class="launchpad-btn" onclick="setRoute('playground')">Launch Playground ➔</button>
                 </div>
 
-                <!-- 2. Architecture -->
+                <!-- 3. Architecture -->
                 <div class="launchpad-card">
                     <div>
                         <div class="launchpad-card-header">
@@ -1694,7 +1648,7 @@
                     <button class="launchpad-btn" onclick="setRoute('architecture')">Inspect Architecture ➔</button>
                 </div>
 
-                <!-- 3. RAG Explorer -->
+                <!-- 4. RAG Explorer -->
                 <div class="launchpad-card">
                     <div>
                         <div class="launchpad-card-header">
@@ -1702,13 +1656,13 @@
                             <span class="pill" style="font-size: 0.7rem;">Line Citations</span>
                         </div>
                         <div class="launchpad-card-desc">
-                            Client-side semantic search across 5 verified architecture manifests with verbatim line citations and out-of-domain fallback.
+                            Client-side semantic search across 5 verified architecture manifests with verbatim line citations and fallback.
                         </div>
                     </div>
                     <button class="launchpad-btn" onclick="setRoute('rag')">Search RAG Explorer ➔</button>
                 </div>
 
-                <!-- 4. Demo Theater -->
+                <!-- 5. Demo Theater -->
                 <div class="launchpad-card">
                     <div>
                         <div class="launchpad-card-header">
@@ -1722,7 +1676,7 @@
                     <button class="launchpad-btn" onclick="setRoute('demo')">Enter Demo Theater ➔</button>
                 </div>
 
-                <!-- 5. Enterprise Projects -->
+                <!-- 6. Enterprise Projects -->
                 <div class="launchpad-card">
                     <div>
                         <div class="launchpad-card-header">
@@ -1730,7 +1684,7 @@
                             <span class="pill" style="font-size: 0.7rem;">Portfolio</span>
                         </div>
                         <div class="launchpad-card-desc">
-                            Explore core technical competencies across GenAI, Python FastAPI, DevSecOps, and inspect verified production code artifacts.
+                            Explore core technical competencies across GenAI, Python FastAPI, DevSecOps, and inspect verified production code.
                         </div>
                     </div>
                     <button class="launchpad-btn" onclick="setRoute('projects')">View Enterprise Projects ➔</button>
