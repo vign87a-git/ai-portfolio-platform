@@ -1432,6 +1432,80 @@
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.7) !important;
             transition: all 0.4s ease;
         }
+
+        /* Launchpad Grid Styles */
+        .launchpad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .launchpad-card {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(12px);
+        }
+
+        .launchpad-card:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .launchpad-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .launchpad-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .launchpad-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .launchpad-btn {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            color: #c7d2fe;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .launchpad-btn:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+        }
     </style>
 </head>
 <body>
@@ -1439,13 +1513,13 @@
         <!-- Sticky Cybernetic Command Bar (Hybrid SPA Unification) -->
         <nav class="command-bar" id="commandBar">
             <div class="command-bar-inner">
-                <div class="brand-dock" onclick="setRoute('all')">
+                <div class="brand-dock" onclick="setRoute('overview')">
                     <span class="brand-symbol">θ</span>
                     <span class="brand-text">THETRON</span>
                 </div>
                 <div class="nav-pills">
-                    <button class="nav-pill active" id="pill-all" onclick="setRoute('all')">
-                        <span>🌐 All</span>
+                    <button class="nav-pill active" id="pill-overview" onclick="setRoute('overview')">
+                        <span>🏠 Overview</span>
                     </button>
                     <button class="nav-pill" id="pill-telemetry" onclick="setRoute('telemetry')">
                         <span>⚡ Telemetry</span>
@@ -1486,6 +1560,183 @@
             <h1>THETRON</h1>
             <p class="subtitle">Autonomous AI &amp; Cloud Systems Platform &bull; Demonstrating multi-persona governance, self-defending architecture, and frontier neural systems.</p>
         </header>
+
+        <!-- Executive Overview & Launchpad Portal (Route: #overview) -->
+        <div class="card view-section active-focus" id="overviewSection">
+            <div class="card-header">
+                <div class="card-title">
+                    <span class="brand-symbol" style="font-size: 1.5rem;">θ</span>
+                    <span>THETRON Architecture &amp; Executive Overview</span>
+                </div>
+                <span class="pill" style="background: rgba(34, 197, 94, 0.15); color: #4ade80;">100% Free &bull; $0.00 Spend Invariant</span>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 20px; line-height: 1.65;">
+                Welcome to <strong>THETRON</strong> — an enterprise-grade autonomous AI, distributed cloud systems, and real-time neural architecture platform. Built from first principles to demonstrate <strong>multi-persona Git governance</strong>, <strong>zero-cost serverless CI/CD</strong>, and <strong>self-defending frontier AI</strong> powered by <strong>Gemini 3.6 Flash</strong>.
+            </p>
+
+            <!-- Platform Highlights 3 Pillars -->
+            <div class="features-grid" style="margin-top: 0; margin-bottom: 24px;">
+                <div class="feature-card">
+                    <span class="feature-badge">Origin &amp; Identity</span>
+                    <div class="feature-title">Ramanujan Mock Theta (θ)</div>
+                    <div class="feature-desc">Fuses Srinivasa Ramanujan’s 1920 Mock Theta functions with the deep learning neuron suffix (-tron), bridging mathematical elegance with neural engineering.</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-badge">FinOps Invariant</span>
+                    <div class="feature-title">Option C Decoupling</div>
+                    <div class="feature-desc">Shifts 24/7 continuous hosting to GitHub Pages edge CDN, eliminating $58.40/mo in idle compute fees while reserving Cloud Run for production releases.</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-badge">Zero-Trust Security</span>
+                    <div class="feature-title">Multi-Persona SoD Gate</div>
+                    <div class="feature-desc">Strict bidirectional Separation of Duties: <code>vign87a-dev</code> authors commits/PRs; <code>vign87a-lead</code> reviews &amp; merges. Enforced by Bandit AST &amp; TruffleHog.</div>
+                </div>
+            </div>
+
+            <!-- Live Telemetry & FinOps Ribbon -->
+            <div class="hud-container" style="margin-bottom: 24px;">
+                <div class="hud-header">
+                    <div class="hud-title">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+                        <span>Live Telemetry &amp; FinOps Cost Avoidance HUD</span>
+                    </div>
+                    <div class="hud-audio-controls">
+                        <button class="audio-toggle-btn active" id="audioToggleBtnOverview" onclick="THETRON_AUDIO.toggle()">
+                            🔊 SFX ON
+                        </button>
+                        <span class="pill" style="font-size: 0.7rem; padding: 2px 8px;">Edge: centralindia</span>
+                    </div>
+                </div>
+                <div class="hud-grid">
+                    <div class="hud-stat">
+                        <div class="hud-stat-label"><span>⚡ API Round-Trip (RTT)</span></div>
+                        <div class="hud-stat-val" id="hudLatencyOverview" style="color: var(--accent);">-- ms</div>
+                        <div class="hud-stat-meta">Gemini 3.6 Flash live inference latency</div>
+                    </div>
+                    <div class="hud-stat">
+                        <div class="hud-stat-label"><span>🔢 Session Tokens</span></div>
+                        <div class="hud-stat-val" id="hudTokensOverview" style="color: #c084fc;">0</div>
+                        <div class="hud-stat-meta">Total I/O tokens processed in session</div>
+                    </div>
+                    <div class="hud-stat">
+                        <div class="hud-stat-label"><span>💰 Avoided Cloud Spend</span></div>
+                        <div class="hud-stat-val" id="hudAvoidedCostOverview" style="color: var(--accent-green);">$58.40</div>
+                        <div class="hud-stat-meta">vs. $58.40/mo dedicated Cloud Run/GKE</div>
+                    </div>
+                    <div class="hud-stat">
+                        <div class="hud-stat-label"><span>🛡️ DevSecOps CI Gate</span></div>
+                        <div class="hud-stat-val" style="color: #38bdf8; font-size: 0.92rem;">0 Vulns</div>
+                        <div class="hud-stat-meta">Bandit AST &amp; TruffleHog OSS verified</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Recruiter Lens -->
+            <div class="lens-container" style="margin-bottom: 24px;">
+                <div class="lens-header">
+                    <div class="lens-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                        <span>Dynamic Recruiter Lens: Evaluate Candidate By Role</span>
+                    </div>
+                    <div class="lens-tabs">
+                        <button class="lens-tab active" data-lens="all" onclick="setLens('all')">🌐 All-Rounder</button>
+                        <button class="lens-tab" data-lens="devops" onclick="setLens('devops')">☁️ Cloud &amp; DevOps Architect</button>
+                        <button class="lens-tab" data-lens="agentic" onclick="setLens('agentic')">🤖 Agentic AI Engineer</button>
+                        <button class="lens-tab" data-lens="fullstack" onclick="setLens('fullstack')">🐍 Full-Stack Python</button>
+                    </div>
+                </div>
+                <div class="lens-summary-box">
+                    <div id="lensDescriptionOverview">
+                        <strong>Comprehensive Overview:</strong> Highlights multi-persona Git governance, automated CI/CD, and real-time Gemini AI integration.
+                    </div>
+                    <button class="lens-pitch-btn" onclick="launchRolePitchFromOverview()">✨ Generate Role Pitch in Playground ➔</button>
+                </div>
+            </div>
+
+            <!-- 5 Tool Launchpad Cards -->
+            <div style="margin-top: 10px; margin-bottom: 8px;">
+                <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Interactive Platform Modules &amp; Tools</span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">
+                    Select any module below to launch directly into its focused interactive workspace:
+                </p>
+            </div>
+
+            <div class="launchpad-grid">
+                <!-- 1. Playground -->
+                <div class="launchpad-card">
+                    <div>
+                        <div class="launchpad-card-header">
+                            <span class="launchpad-card-title">🤖 AI Defense Playground</span>
+                            <span class="pill" style="font-size: 0.7rem;">Gemini 3.6</span>
+                        </div>
+                        <div class="launchpad-card-desc">
+                            Challenge Gemini 3.6 Flash on architecture decisions, adversarial prompt injections, and meta-defense. Includes custom API key support.
+                        </div>
+                    </div>
+                    <button class="launchpad-btn" onclick="setRoute('playground')">Launch Playground ➔</button>
+                </div>
+
+                <!-- 2. Architecture -->
+                <div class="launchpad-card">
+                    <div>
+                        <div class="launchpad-card-header">
+                            <span class="launchpad-card-title">🏛️ Architecture Visualizer</span>
+                            <span class="pill" style="font-size: 0.7rem;">Topology</span>
+                        </div>
+                        <div class="launchpad-card-desc">
+                            Interactive system topology inspector, multi-persona Git SSH config, and real-time AI AST code deconstruction.
+                        </div>
+                    </div>
+                    <button class="launchpad-btn" onclick="setRoute('architecture')">Inspect Architecture ➔</button>
+                </div>
+
+                <!-- 3. RAG Explorer -->
+                <div class="launchpad-card">
+                    <div>
+                        <div class="launchpad-card-header">
+                            <span class="launchpad-card-title">📚 In-Browser RAG Explorer</span>
+                            <span class="pill" style="font-size: 0.7rem;">Line Citations</span>
+                        </div>
+                        <div class="launchpad-card-desc">
+                            Client-side semantic search across 5 verified architecture manifests with verbatim line citations and out-of-domain fallback.
+                        </div>
+                    </div>
+                    <button class="launchpad-btn" onclick="setRoute('rag')">Search RAG Explorer ➔</button>
+                </div>
+
+                <!-- 4. Demo Theater -->
+                <div class="launchpad-card">
+                    <div>
+                        <div class="launchpad-card-header">
+                            <span class="launchpad-card-title">🎓 How-To &amp; Demo Theater</span>
+                            <span class="pill" style="font-size: 0.7rem;">Audiovisual</span>
+                        </div>
+                        <div class="launchpad-card-desc">
+                            6-chapter audiovisual walkthrough featuring procedural canvas simulations, synthesized speech narration, and runbooks.
+                        </div>
+                    </div>
+                    <button class="launchpad-btn" onclick="setRoute('demo')">Enter Demo Theater ➔</button>
+                </div>
+
+                <!-- 5. Enterprise Projects -->
+                <div class="launchpad-card">
+                    <div>
+                        <div class="launchpad-card-header">
+                            <span class="launchpad-card-title">💼 Projects &amp; Competencies</span>
+                            <span class="pill" style="font-size: 0.7rem;">Portfolio</span>
+                        </div>
+                        <div class="launchpad-card-desc">
+                            Explore core technical competencies across GenAI, Python FastAPI, DevSecOps, and inspect verified production code artifacts.
+                        </div>
+                    </div>
+                    <button class="launchpad-btn" onclick="setRoute('projects')">View Enterprise Projects ➔</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Telemetry & Recruiter Lens Section (Route: #telemetry) -->
         <div id="telemetrySection" class="view-section">
@@ -2227,11 +2478,13 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                 if (this.enabled) this.beep(880, 0.04);
             },
             updateUI() {
-                const btn = document.getElementById('audioToggleBtn');
-                if (btn) {
-                    btn.innerHTML = this.enabled ? '🔊 SFX ON' : '🔇 SFX OFF';
-                    btn.classList.toggle('active', this.enabled);
-                }
+                ['audioToggleBtn', 'audioToggleBtnOverview'].forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) {
+                        btn.innerHTML = this.enabled ? '🔊 SFX ON' : '🔇 SFX OFF';
+                        btn.classList.toggle('active', this.enabled);
+                    }
+                });
             },
             beep(freq = 880, duration = 0.04, type = 'sine') {
                 if (!this.enabled) return;
@@ -2383,12 +2636,13 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
         };
 
         // =========================================================================
-        // HYBRID DEEP-LINKED SPA ROUTER (Options 1, 2, & 3 Combined)
+        // HYBRID DEEP-LINKED SPA ROUTER (Option B Dedicated Overview Portal)
         // =========================================================================
-        let currentRoute = 'playground';
+        let currentRoute = 'overview';
         let viewMode = localStorage.getItem('thetron_view_mode') || 'focused'; // 'focused' (default) or 'full'
 
         const ROUTE_SECTIONS = {
+            overview: 'overviewSection',
             telemetry: 'telemetrySection',
             playground: 'playgroundSection',
             architecture: 'architectureSection',
@@ -2401,18 +2655,18 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
             applyViewModeUI();
 
             const hash = window.location.hash.replace('#', '').toLowerCase();
-            if (hash && (ROUTE_SECTIONS[hash] || hash === 'all')) {
+            if (hash && ROUTE_SECTIONS[hash]) {
                 setRoute(hash, false, false);
             } else {
-                setRoute('playground', false, false);
+                setRoute('overview', false, false);
             }
 
             window.addEventListener('hashchange', () => {
                 const newHash = window.location.hash.replace('#', '').toLowerCase();
-                if (newHash && (ROUTE_SECTIONS[newHash] || newHash === 'all')) {
+                if (newHash && ROUTE_SECTIONS[newHash]) {
                     setRoute(newHash, true, false);
-                } else if (!newHash) {
-                    setRoute('playground', true, false);
+                } else if (!newHash || newHash === 'overview') {
+                    setRoute('overview', true, false);
                 }
             });
         }
@@ -2423,9 +2677,13 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
             applyViewModeUI();
             THETRON_AUDIO.beep(920, 0.04);
             if (viewMode === 'focused') {
-                setRoute(currentRoute === 'all' ? 'playground' : currentRoute, false, true);
+                setRoute(currentRoute || 'overview', false, true);
             } else {
-                setRoute('all', false, true);
+                // In full mode, show all view sections
+                document.querySelectorAll('.view-section').forEach(sec => {
+                    sec.classList.remove('active-focus');
+                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
@@ -2469,18 +2727,11 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                     sec.classList.remove('active-focus');
                 });
 
-                if (routeKey === 'all') {
-                    viewMode = 'full';
-                    localStorage.setItem('thetron_view_mode', 'full');
-                    applyViewModeUI();
+                const targetId = ROUTE_SECTIONS[routeKey] || 'overviewSection';
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.classList.add('active-focus');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    const targetId = ROUTE_SECTIONS[routeKey];
-                    const targetEl = document.getElementById(targetId);
-                    if (targetEl) {
-                        targetEl.classList.add('active-focus');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
                 }
             } else {
                 // Full Dashboard Mode: ensure all view-sections visible, smooth-scroll to target
@@ -2488,16 +2739,12 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
                     sec.classList.remove('active-focus');
                 });
 
-                if (routeKey === 'all') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    const targetId = ROUTE_SECTIONS[routeKey];
-                    const targetEl = document.getElementById(targetId);
-                    if (targetEl) {
-                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        targetEl.classList.add('section-highlight');
-                        setTimeout(() => targetEl.classList.remove('section-highlight'), 1400);
-                    }
+                const targetId = ROUTE_SECTIONS[routeKey] || 'overviewSection';
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    targetEl.classList.add('section-highlight');
+                    setTimeout(() => targetEl.classList.remove('section-highlight'), 1400);
                 }
             }
         }
@@ -2519,13 +2766,18 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload</div>
 
             const currentAvoided = (BASE_AVOIDED_MONTHLY + (totalQueries * COST_PER_QUERY_AVOIDED)).toFixed(4);
 
-            const latEl = document.getElementById('hudLatency');
-            const tokEl = document.getElementById('hudTokens');
-            const costEl = document.getElementById('hudAvoidedCost');
-
-            if (latEl) latEl.innerText = `${rttMs} ms`;
-            if (tokEl) tokEl.innerText = totalSessionTokens.toLocaleString();
-            if (costEl) costEl.innerText = `$${currentAvoided}`;
+            ['hudLatency', 'hudLatencyOverview'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = `${rttMs} ms`;
+            });
+            ['hudTokens', 'hudTokensOverview'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = totalSessionTokens.toLocaleString();
+            });
+            ['hudAvoidedCost', 'hudAvoidedCostOverview'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = `$${currentAvoided}`;
+            });
         }
 
         // =========================================================================
@@ -2795,8 +3047,18 @@ ${manifest.content}
                 }
             });
 
-            document.getElementById('lensDescription').innerHTML = LENS_DATA[lensKey].desc;
+            const descEl = document.getElementById('lensDescription');
+            if (descEl) descEl.innerHTML = LENS_DATA[lensKey].desc;
+            const descOverviewEl = document.getElementById('lensDescriptionOverview');
+            if (descOverviewEl) descOverviewEl.innerHTML = LENS_DATA[lensKey].desc;
             renderChips(LENS_DATA[lensKey].prompts);
+        }
+
+        function launchRolePitchFromOverview() {
+            setRoute('playground');
+            setTimeout(() => {
+                generateRolePitch();
+            }, 150);
         }
 
         function renderChips(prompts) {
@@ -2886,7 +3148,7 @@ ${manifest.content}
                     badge: "CHAPTER 1: PLATFORM OVERVIEW & GENESIS",
                     duration: 28,
                     desc: "Genesis of THETRON, Ramanujan Mock Theta mathematics, and the $0.00 spend invariant.",
-                    targetRoute: "all",
+                    targetRoute: "overview",
                     keyframes: [
                         { time: 0, sub: "Welcome to THETRON: an autonomous AI and cloud systems platform engineering showcase.", speech: "Welcome to Thetron. An autonomous AI and cloud systems platform engineering showcase." },
                         { time: 7, sub: "THETRON fuses Theta and Neuron, inspired by Srinivasa Ramanujan's 1920 Mock Theta functions.", speech: "Thetron fuses Theta and Neuron, inspired by Srinivasa Ramanujan's 1920 Mock Theta functions." },
@@ -4191,7 +4453,7 @@ ${manifest.content}
                 viewMode = 'focused';
                 localStorage.setItem('thetron_view_mode', 'focused');
                 applyViewModeUI();
-                setRoute('playground', false, true);
+                setRoute('overview', false, true);
             },
 
             toggle() {
