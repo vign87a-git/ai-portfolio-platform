@@ -17,10 +17,11 @@
 ## 🌐 Live Interactive Platform & Direct Deep-Links
 👉 **[Experience THETRON Live](https://vign87a-git.github.io/ai-portfolio-platform/)**
 
-The platform implements a **Hybrid Deep-Linked SPA Architecture** unifying a **Sticky Cybernetic Command Bar**, a **Dynamic View Mode Switcher** (`🌐 Full Dashboard` vs `🎯 Focused Tool Workspace`), and **Client-Side Deep-Link Routing** with instant hydration:
+The platform implements a **Hybrid Deep-Linked SPA Architecture** unifying a **Sticky Cybernetic Command Bar**, a **Dedicated Single-View Architecture** (zero-scroll single-tool focus), and **Client-Side Deep-Link Routing** with instant hydration:
 
 | Interactive Tool / Module | Direct Deep-Link Hash | Standalone Direct Entry URL |
 | :--- | :--- | :--- |
+| **🏛️ Executive Overview & Launchpad Portal** | [`/#overview`](https://vign87a-git.github.io/ai-portfolio-platform/#overview) | Executive Briefing & Architecture Directory |
 | **📚 In-Browser Repository RAG Explorer** | [`/#rag`](https://vign87a-git.github.io/ai-portfolio-platform/#rag) | [`/rag.html`](https://vign87a-git.github.io/ai-portfolio-platform/rag.html) |
 | **🎓 How-To, Demo Theater & Playbooks** | [`/#demo`](https://vign87a-git.github.io/ai-portfolio-platform/#demo) | [`/demo.html`](https://vign87a-git.github.io/ai-portfolio-platform/demo.html) |
 | **🏛️ Architecture Visualizer & Deconstructor** | [`/#architecture`](https://vign87a-git.github.io/ai-portfolio-platform/#architecture) | [`/architecture.html`](https://vign87a-git.github.io/ai-portfolio-platform/architecture.html) |

@@ -9,6 +9,19 @@ def test_read_root():
     assert response.status_code == 200
     assert "THETRON" in response.text
 
+def test_favicon():
+    response = client.get("/favicon.svg")
+    assert response.status_code == 200
+    assert "image/svg+xml" in response.headers.get("content-type", "")
+    assert "<svg" in response.text
+
+def test_redirect_routes():
+    for route in ["/architecture.html", "/demo.html", "/projects.html", "/rag.html", "/telemetry.html",
+                  "/architecture", "/demo", "/projects", "/rag", "/telemetry"]:
+        response = client.get(route)
+        assert response.status_code == 200
+        assert "THETRON" in response.text
+
 def test_generate_missing_api_key(monkeypatch):
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     response = client.post("/generate", json={"text": "Hello"})
@@ -39,6 +52,3 @@ def test_generate_content_success(monkeypatch):
     assert response.status_code == 200
     json_data = response.json()
     assert json_data == {"reply": "Hello from Gemini 3.6 Flash!"}
-
-
-
