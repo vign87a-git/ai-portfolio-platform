@@ -46,7 +46,7 @@ The platform implements a **Hybrid Deep-Linked SPA Architecture** unifying a **S
 
 ## 🏛️ System Architecture Topology
 
-The platform operates on a decoupled **Option C CI/CD architecture**, isolating public serverless hosting from containerized cloud runtime:
+The platform operates on a **Decoupled Serverless Edge Architecture**, isolating public serverless hosting from containerized cloud runtime:
 
 ```mermaid
 flowchart TD
@@ -64,7 +64,7 @@ flowchart TD
         PRComment --> Lead
     end
 
-    subgraph CI_CD ["Decoupled Option C CI/CD Pipeline"]
+    subgraph CI_CD ["Decoupled Serverless CI/CD Pipeline"]
         Main -- "Push Event" --> ActionPages[".github/workflows/deploy-pages.yml"]
         ActionPages --> PytestGate["Pytest Suite (3/3 Tests with Mock Fixtures)"]
         PytestGate --> SecretInject["Safe Python Secret Injection (GEMINI_API_KEY)"]
